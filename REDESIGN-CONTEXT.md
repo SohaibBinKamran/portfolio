@@ -30,7 +30,9 @@ one in a way that changes pages you're not building.
 - **Next.js 16.2.10**, App Router, TypeScript, `src/` dir, Turbopack
 - **Tailwind CSS v4** — CSS-first config in `src/app/globals.css` via `@theme inline`. **There is no `tailwind.config.js`.** Add tokens as CSS vars inside `@theme inline`.
 - **Framer Motion 12** for animation
-- No git repo (user's choice — don't `git init` without asking)
+- **Git repo:** `github.com/SohaibBinKamran/portfolio` (public). Push to `main` → GitHub
+  Actions builds a static export and deploys to GitHub Pages at
+  **https://sohaibbinkamran.com**. See §23.
 
 ```bash
 npm run dev
@@ -1057,8 +1059,9 @@ inlined in the client chunk, and a real test submission returned `success:true` 
 "Message sent" panel rendered. No console errors. Mobile/tablet (§8.4) not yet checked —
 form row collapses at `sm`, rest is centred.
 
-**Env** — `.env.local` holds `NEXT_PUBLIC_WEB3FORMS_KEY=8d8aeb15-…ca71` (gitignored /
-no repo). Must be re-added on the deploy host.
+**Env** — `.env.local` holds `NEXT_PUBLIC_WEB3FORMS_KEY=8d8aeb15-…ca71` (gitignored). For
+CI the key is set inline in `.github/workflows/deploy.yml` (public by design — scoped to the
+destination email on web3forms.com). Live and working in production.
 
 **Deviations from Figma** — the Figma form is 3 fields (Name / Company / Message); added a
 required **Email** field (full-width, between the Name+Company row and Message) so replies
@@ -1068,6 +1071,30 @@ are possible, matching what the old Framer form captured. The card bg is `bg-bg-
 **Confirmed working (Aug 2026)** — user verified a test submission landed in their inbox.
 End-to-end: browser → Web3Forms → email delivered.
 
-**Still open** — add `NEXT_PUBLIC_WEB3FORMS_KEY` on the deploy host before shipping.
-Mobile/tablet (§8.4). Optional: route submissions + the visible "Or email me directly"
-address through a `hello@<godaddy-domain>` forwarder instead of the personal Gmail.
+**Still open** — Mobile/tablet (§8.4). Optional: route submissions + the visible "Or email
+me directly" address through a `hello@<godaddy-domain>` forwarder instead of the personal Gmail.
+
+---
+
+## 23. Deployment (Sep 2026)
+
+**Live: https://sohaibbinkamran.com** — GitHub Pages, static export, off Framer.
+
+- **Repo:** `github.com/SohaibBinKamran/portfolio` (public). `git` + `gh` CLI authenticated
+  on the user's machine (gh keyring, account `SohaibBinKamran`).
+- **Pipeline:** `.github/workflows/deploy.yml` — on push to `main`: `npm install` (not
+  `npm ci` — the Windows-generated lockfile omits Linux-only optional native deps),
+  `npm run build`, `actions/deploy-pages`. ~40s end to end.
+- **Static export:** `next.config.ts` has `output: "export"`, `trailingSlash: true`,
+  `images: { unoptimized: true }`. `public/CNAME` = `sohaibbinkamran.com`, `public/.nojekyll`.
+- **DNS (GoDaddy):** apex `A` → 185.199.108–111.153; `www` `CNAME` → `sohaibbinkamran.github.io`.
+  Domain removed from the old Framer project. HTTPS enforced (Let's Encrypt via GitHub).
+- **`.claude/` is gitignored.** `.env*` is gitignored (see §22 for the CI key).
+- Build-blocker fixed to ship: `PinGate.tsx` had a TS error (`status !== "success"` guard
+  narrowed away later `=== "success"` checks) → changed to `!cleared`. Added `metadataBase`
+  to `layout.tsx`.
+
+**Analytics:** Hotjar (site `6532500`) — inline `<Script id="hotjar" strategy="afterInteractive">`
+in `layout.tsx`, loads site-wide. Verified live in the served HTML.
+
+**To update the site:** edit, commit, `git push`. Deploy is automatic.
