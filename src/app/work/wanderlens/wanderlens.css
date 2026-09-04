@@ -1,0 +1,67 @@
+/* WanderLens case study — scoped design tokens + type.
+   Bespoke palette from Figma node 859-6787 (Portfolio/Wanderlens-CaseStudy).
+   Not part of the site design system — everything is namespaced under `.wanderlens`. */
+
+.wanderlens {
+  /* Greens */
+  --wl-forest: #2f4428; /* wordmark, dark sections, headings */
+  --wl-forest-deep: #1d2a18; /* case-study footer */
+  --wl-forest-panel: #1f321e; /* dark feature card */
+  --wl-moss: #7e9a2e; /* eyebrows on light, primary "go" */
+  --wl-moss-bright: #96b73a; /* accents on dark */
+  --wl-amber: #f2901a; /* eyebrow dash, gamification, index numerals */
+
+  /* Neutrals */
+  --wl-sage: #e7e6d3; /* calm section background */
+  --wl-paper: #fbfaf4; /* default surface */
+  --wl-hero-a: #eef0e2;
+  --wl-hero-b: #e7e6d3;
+  --wl-ink: #1d2317; /* strong body */
+  --wl-ink-muted: #5b6354; /* secondary body on light */
+  --wl-ink-faint: #7c8a6b;
+  --wl-on-dark: #c9d6ba; /* body on forest */
+  --wl-on-dark-muted: #a9b895;
+  --wl-on-dark-soft: #b9c4a9;
+  --wl-border: rgba(45, 68, 40, 0.16);
+  --wl-border-on-dark: rgba(255, 255, 255, 0.15);
+
+  /* Type — Circular Std is self-hosted (shared with CabinBlu); Mulish for the wordmark. */
+  --wl-sans: var(--font-cabinblu-sans), "Satoshi", var(--font-inter), sans-serif;
+  --wl-display: var(--font-mulish), var(--font-cabinblu-sans), sans-serif;
+  --wl-mono: var(--font-cabinblu-mono), "JetBrains Mono", monospace;
+
+  font-family: var(--wl-sans);
+  color: var(--wl-ink);
+  background: var(--wl-paper);
+}
+
+.wanderlens h1,
+.wanderlens h2,
+.wanderlens h3,
+.wanderlens h4,
+.wanderlens h5 {
+  font-family: var(--wl-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--wl-forest);
+}
+
+.wanderlens .wl-eyebrow {
+  font-family: var(--wl-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12.5px;
+  line-height: 20px;
+}
+
+.wanderlens .wl-wordmark {
+  font-family: var(--wl-display);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+/* smooth in-page anchor jump for the hero "Read the Research" link */
+.wanderlens {
+  scroll-behavior: smooth;
+}

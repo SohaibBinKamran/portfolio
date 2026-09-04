@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Backgrounds */
+  --color-bg-base: #ffffff;
+  --color-bg-cream: #fcf9f5;
+  --color-bg-dark: #121212;
+  --color-bg-dark-alt: #212121;
+  --color-bg-muted: #f6f6f7;
+  --color-border-soft: #ebe8e6;
+
+  /* Text */
+  --color-ink: #0d0d0d;
+  --color-ink-muted: #5f5f6b;
+  --color-paper: #ffffff;
+
+  /* Accents */
+  --color-accent-purple: #5e45ff;
+  --color-accent-lime: #c5ff52;
+  --color-accent-blue: #265bff;
+  --color-accent-alert: #ff5a3c;
+
+  /* Fonts */
+  --font-serif: var(--font-instrument-serif), "Instrument Serif", serif;
+  --font-sans: "Satoshi", var(--font-inter), sans-serif;
+  --font-ui: var(--font-inter), "Inter", sans-serif;
+  --font-hand: var(--font-gloria), "Gloria Hallelujah", "Comic Sans MS", cursive;
+
+  /* Radius scale (from design audit) */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-blob: 56px;
+
+  /* Section gutters */
+  --spacing-gutter: 120px;
+  --spacing-gutter-sm: 24px;
+
+  /* Soft-UI layered shadow */
+  --shadow-soft: 0 1px 2px rgba(20, 21, 26, 0.05), 0 12px 24px -8px rgba(0, 0, 0, 0.08);
+  --shadow-glass-inset: inset 0 1px 1px rgba(255, 255, 255, 0.4), inset 0 -1px 6px rgba(255, 255, 255, 0.15);
+
+  /* Pill button — layered drop + inner-glow stack (from Figma button SVGs) */
+  --shadow-pill: 0 0.72px 0.72px -1.25px rgba(0, 0, 0, 0.22),
+    0 2.75px 2.75px -2.5px rgba(0, 0, 0, 0.19),
+    0 12px 12px -3.75px rgba(0, 0, 0, 0.08),
+    inset 0 0.6px 1.08px 0.92px rgba(255, 255, 255, 0.35),
+    inset 0 2.29px 4.12px 1.83px rgba(255, 255, 255, 0.34),
+    inset 0 10px 18px 2.75px rgba(255, 255, 255, 0.29);
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Marquee keyframe used by Marquee.tsx */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* WhyMe feature-icon loops (WhyMe.tsx). Paused under prefers-reduced-motion. */
+@keyframes wm-wing {
+  0%, 100% { transform: rotate(-11deg); }
+  50%      { transform: rotate(11deg); }
+}
+@keyframes wm-windmill {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes wm-beat {
+  0%, 30%, 100% { transform: scale(1); }
+  12%           { transform: scale(1.2); }
+  21%           { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wm-icon-anim { animation: none !important; }
+}
+
+/*
+ * Site-wide custom cursor. `SiteCursor.tsx` adds `.has-custom-cursor` to <html>
+ * only on fine pointers, so touch devices and no-JS keep the system cursor.
+ * The min-width guard matches SiteCursor's own `md:` visibility gate.
+ */
+@media (min-width: 768px) {
+  .has-custom-cursor,
+  .has-custom-cursor *,
+  .has-custom-cursor *::before,
+  .has-custom-cursor *::after {
+    cursor: none !important;
+  }
+}

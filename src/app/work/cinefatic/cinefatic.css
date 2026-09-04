@@ -1,0 +1,69 @@
+/* Cinefatic case study — scoped design tokens + type.
+   Bespoke "cinema noir" palette from Figma node 869-5598 (Portfolio/Cinefatic-CaseStudy).
+   Not part of the site design system — everything is namespaced under `.cinefatic`. */
+
+.cinefatic {
+  /* Surfaces */
+  --cf-bg: #120509; /* page ground — also fills the ticket-stub notches */
+  --cf-panel: #3c1521; /* raised cards, phone showcase */
+  --cf-panel-deep: #170810; /* logo tiles, phone bezels */
+  --cf-cream: #f6ead6; /* stat cards, inline callouts */
+  --cf-notch: #2a0f18; /* notch punch-outs on cream cards */
+
+  /* Ink */
+  --cf-heading: #f6ead6; /* section headings */
+  --cf-body: #d8bdb3; /* body copy on dark */
+  --cf-body-dim: #a98a89; /* captions, fig labels */
+  --cf-on-cream: #271219; /* text on cream */
+
+  /* Accents */
+  --cf-gold: #e2a84c; /* eyebrows */
+  --cf-crimson: #e13a63; /* rule accents, index numerals, screen labels */
+  --cf-rose: #a72749; /* display numbers on cream */
+
+  /* Lines */
+  --cf-border: rgba(255, 255, 255, 0.14);
+  --cf-border-soft: rgba(255, 255, 255, 0.08);
+
+  /* Type — Circular Std is self-hosted (shared with CabinBlu). */
+  --cf-sans: var(--font-cabinblu-sans), "Satoshi", var(--font-inter), sans-serif;
+  --cf-display: var(--font-bebas), "Bebas Neue", var(--font-cabinblu-sans), sans-serif;
+  --cf-hand: var(--font-caveat), "Caveat", cursive;
+
+  background: var(--cf-bg);
+  color: var(--cf-body);
+  font-family: var(--cf-sans);
+  scroll-behavior: smooth;
+}
+
+.cinefatic h1,
+.cinefatic h2,
+.cinefatic h3,
+.cinefatic h4 {
+  font-family: var(--cf-sans);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--cf-heading);
+}
+
+.cinefatic .cf-display {
+  font-family: var(--cf-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.cinefatic .cf-eyebrow {
+  font-family: var(--cf-sans);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11.5px;
+  color: var(--cf-gold);
+}
+
+.cinefatic .cf-hand {
+  font-family: var(--cf-hand);
+  font-weight: 500;
+}

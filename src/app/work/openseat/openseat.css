@@ -1,0 +1,128 @@
+/* OpenSeat case study — scoped design tokens + type.
+   "Warm menu" system from Figma node 869-11269 (Portfolio/OpenSeat-Project).
+   Not part of the site design system — everything is namespaced under `.openseat`.
+   Headline + body face is Manrope (--font-manrope, loaded in layout.tsx);
+   eyebrows/labels reuse JetBrains Mono (--font-cabinblu-mono). */
+
+.openseat {
+  /* Surfaces */
+  --os-bg: #fbf2e6; /* warm cream page ground */
+  --os-card: #ffffff;
+  --os-tint: #f6ead6; /* faint warm panel */
+  --os-dark: #2b2018; /* ink / dark cards */
+
+  /* Ink */
+  --os-ink: #2b2018; /* headings */
+  --os-body: #7a6a5a; /* body copy */
+  --os-muted: #9a8a78; /* captions, meta */
+
+  /* Accents */
+  --os-coral: #f0603f; /* broadcast coral — CTAs, index numerals, rules */
+  --os-coral-deep: #d14e30; /* eyebrow / label text */
+  --os-coral-soft: #ed7364; /* beacon chips */
+  --os-coral-tint: rgba(240, 96, 63, 0.1);
+  --os-sage: #71916f; /* vibe sage — "what worked" */
+  --os-sage-tint: #e3ebe0;
+  --os-mustard: #e0a23a; /* timer mustard — "what to improve" */
+  --os-mustard-tint: #f8ecd4;
+
+  /* Lines */
+  --os-border: rgba(43, 32, 24, 0.15);
+
+  /* Type */
+  --os-sans: var(--font-manrope), "Satoshi", var(--font-inter), sans-serif;
+  --os-mono: var(--font-cabinblu-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  background: var(--os-bg);
+  color: var(--os-body);
+  font-family: var(--os-sans);
+  scroll-behavior: smooth;
+}
+
+.openseat h1,
+.openseat h2,
+.openseat h3,
+.openseat h4 {
+  font-family: var(--os-sans);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--os-ink);
+}
+
+.openseat .os-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--os-mono);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12.5px;
+  color: var(--os-coral-deep);
+}
+
+.openseat .os-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--os-coral);
+}
+
+/* Hero phone trio — "paper fan" open on load.
+   Resting transforms below are the final fanned layout, so the hero is correct
+   with JS disabled; the keyframes just replay the open on first paint. */
+.openseat .os-phone {
+  transform-origin: bottom center;
+  will-change: transform;
+}
+.openseat .os-phone-l {
+  transform: rotate(-9deg);
+  animation: os-fan-left 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+.openseat .os-phone-r {
+  transform: rotate(9deg);
+  animation: os-fan-right 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+}
+.openseat .os-phone-c {
+  animation: os-fan-center 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes os-fan-left {
+  from {
+    transform: translateX(150px) translateY(-24px) rotate(0deg);
+  }
+  to {
+    transform: translateX(0) translateY(0) rotate(-9deg);
+  }
+}
+@keyframes os-fan-right {
+  from {
+    transform: translateX(-150px) translateY(-24px) rotate(0deg);
+  }
+  to {
+    transform: translateX(0) translateY(0) rotate(9deg);
+  }
+}
+@keyframes os-fan-center {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .openseat .os-phone-l,
+  .openseat .os-phone-r,
+  .openseat .os-phone-c {
+    animation: none;
+  }
+  .openseat .os-phone-c {
+    opacity: 1;
+    transform: none;
+  }
+}
