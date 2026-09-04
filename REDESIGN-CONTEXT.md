@@ -1097,4 +1097,9 @@ me directly" address through a `hello@<godaddy-domain>` forwarder instead of the
 **Analytics:** Hotjar (site `6532500`) — inline `<Script id="hotjar" strategy="afterInteractive">`
 in `layout.tsx`, loads site-wide. Verified live in the served HTML.
 
+**Favicon:** the `sbk.` handwritten mark (`public/images/sbk-logo.png`, same as the footer).
+`src/app/icon.png` (128², transparent) + `src/app/apple-icon.png` (180², white bg) via the
+Next file convention — the default `favicon.ico` was deleted. Regenerate with sharp: `trim()`
+the source, contain into ~72% of the canvas, center.
+
 **To update the site:** edit, commit, `git push`. Deploy is automatic.
