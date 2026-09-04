@@ -1,36 +1,28 @@
 # Deployment — GitHub Pages + sohaibbinkamran.com
 
-The code side is done: static export (`output: "export"`), `public/CNAME`,
-`public/.nojekyll`, and `.github/workflows/deploy.yml` (build + deploy on push to `main`).
+## Done
 
-## 1. Create the GitHub repo and push
+- Static export (`output: "export"`), `public/CNAME`, `public/.nojekyll`,
+  `.github/workflows/deploy.yml` (build + deploy on push to `main`).
+- Repo: **https://github.com/SohaibBinKamran/portfolio** (public), pushed.
+- Pages enabled with the GitHub Actions source; first deploy is green.
+- Custom domain `sohaibbinkamran.com` configured on the repo.
 
-Create a repo at https://github.com/new — name it e.g. `portfolio`, **Public**,
-no README/gitignore/license. Then, from this folder:
+Site is serving now at https://sohaibbinkamran.github.io/portfolio/ (redirects to
+the custom domain once DNS is switched).
 
-```bash
-git remote add origin https://github.com/<USERNAME>/portfolio.git
-git push -u origin main
-```
-
-## 2. Turn on Pages
-
-Repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-The `Deploy to GitHub Pages` workflow runs on every push; watch it under the **Actions** tab.
-
-After the first successful run, still in **Settings → Pages**, set
-**Custom domain** to `sohaibbinkamran.com` and Save. Leave **Enforce HTTPS**
-unchecked until the certificate finishes provisioning (can take up to ~24h, usually minutes).
-
-## 3. Point the domain (GoDaddy)
+## Remaining: point the domain (GoDaddy) + Framer
 
 First, in **Framer**: remove `sohaibbinkamran.com` from the old project's
 domain settings so it stops serving / claiming the domain.
 
 Then in **GoDaddy → Domain → DNS**:
 
-- **Delete** the existing records that send the domain to Framer — the `A` record(s)
-  on `@`, and any `CNAME` on `www` pointing to Framer. Remove any domain **Forwarding** too.
+- **Delete** the current Framer records:
+  - `A` `@` → `31.43.161.6`
+  - `A` `@` → `31.43.160.6`
+  - `CNAME` `www` → `sites.framer.app`
+  - any domain **Forwarding**
 - **Add** four `A` records on host `@`:
 
   | Type | Name | Value |
@@ -40,13 +32,12 @@ Then in **GoDaddy → Domain → DNS**:
   | A | @ | 185.199.110.153 |
   | A | @ | 185.199.111.153 |
 
-- **Add** one `CNAME` record: Name `www` → Value `<USERNAME>.github.io` (keep the trailing dot if GoDaddy adds it).
+- **Add** one `CNAME` record: Name `www` → Value `sohaibbinkamran.github.io`.
 
 (Optional IPv6 — add `AAAA` on `@`: `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`.)
 
-## 4. Verify
+## Verify
 
-- `https://github.com/<USERNAME>/portfolio/actions` — deploy is green.
 - In **Settings → Pages**, the custom-domain check shows a green tick (retry after DNS propagates, up to a few hours).
 - Visit `https://sohaibbinkamran.com` and `https://www.sohaibbinkamran.com`.
 - Once the tick is green, enable **Enforce HTTPS**.
