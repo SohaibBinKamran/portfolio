@@ -1,8 +1,9 @@
 name: Deploy to GitHub Pages
 
+# Manual-only by design: pushing to main backs work up to GitHub but does NOT
+# publish. Deploys run only when explicitly triggered (Actions tab -> Run
+# workflow, or `gh workflow run deploy.yml`).
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
