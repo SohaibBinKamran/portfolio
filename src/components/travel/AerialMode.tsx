@@ -394,7 +394,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onUp);
 
-    // wheel zoom
+    // wheel zoom (desktop)
     let camDist = camera.position.z;
     let camTargetDist = camDist;
     const ZOOM_MIN = 6.2, ZOOM_MAX = 22;
@@ -403,6 +403,44 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
       camTargetDist = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, camTargetDist + e.deltaY * 0.012));
     };
     stageEl.addEventListener("wheel", onWheel, { passive: false });
+
+    // pinch zoom (touch) — Pointer Events cover single-finger drag-to-rotate
+    // above, but a second simultaneous touch needs tracking of its own: the
+    // distance between the two active pointers scales camTargetDist the
+    // same way the wheel does.
+    const activeTouches = new Map<number, { x: number; y: number }>();
+    let pinchStartDist = 0;
+    let pinchStartCamDist = camTargetDist;
+    const onTouchStart = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (activeTouches.size === 2) {
+        dragging = false;
+        const [a, b] = Array.from(activeTouches.values());
+        pinchStartDist = Math.hypot(a.x - b.x, a.y - b.y);
+        pinchStartCamDist = camTargetDist;
+      }
+    };
+    const onTouchMove = (e: PointerEvent) => {
+      if (e.pointerType !== "touch" || !activeTouches.has(e.pointerId)) return;
+      activeTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (activeTouches.size === 2) {
+        const [a, b] = Array.from(activeTouches.values());
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pinchStartDist > 0) {
+          const scale = pinchStartDist / Math.max(dist, 1);
+          camTargetDist = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, pinchStartCamDist * scale));
+        }
+      }
+    };
+    const onTouchEnd = (e: PointerEvent) => {
+      activeTouches.delete(e.pointerId);
+      pinchStartDist = 0;
+    };
+    stageEl.addEventListener("pointerdown", onTouchStart);
+    window.addEventListener("pointermove", onTouchMove);
+    window.addEventListener("pointerup", onTouchEnd);
+    window.addEventListener("pointercancel", onTouchEnd);
 
     // raycast + hover + click
     const raycaster = new THREE.Raycaster();
@@ -514,6 +552,10 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
       stageEl.removeEventListener("pointerdown", onPointerDown);
       stageEl.removeEventListener("wheel", onWheel);
       stageEl.removeEventListener("pointerup", onClick);
+      stageEl.removeEventListener("pointerdown", onTouchStart);
+      window.removeEventListener("pointermove", onTouchMove);
+      window.removeEventListener("pointerup", onTouchEnd);
+      window.removeEventListener("pointercancel", onTouchEnd);
       pins.forEach((p) => p.userData.label.remove());
       countryAnchors.forEach((c) => c.label.remove());
       renderer.dispose();
@@ -544,7 +586,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#0d0d0d]">
-      <div ref={stageRef} className="absolute inset-0" />
+      <div ref={stageRef} className="absolute inset-0 touch-none" />
       <div ref={labelsRef} />
 
       <div className="pointer-events-none absolute inset-0">
@@ -594,7 +636,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
             )}
           </button>
           <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-[11px] tracking-[0.08em] text-white/55 backdrop-blur-md">
-            DRAG TO ROTATE &middot; SCROLL TO ZOOM &middot; CLICK A PIN
+            DRAG TO ROTATE &middot; SCROLL / PINCH TO ZOOM &middot; CLICK A PIN
           </div>
         </div>
       </div>

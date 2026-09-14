@@ -240,7 +240,7 @@ Known correction: Eurowings Digital started **May 2024** (content file), not May
    WanderLens (§15), Cinefatic (§16), ClassQuest (§17) each got their own `components/<name>/`
    folder, scoped `work/<name>/<name>.css` token block, and `data/<name>.ts` — mirroring
    CabinBlu, which was itself aligned to the fresh design in §18.
-4. **Responsive** — Figma frames are desktop. Get mobile/tablet frames, or agree on breakpoint behavior before building.
+4. **Responsive** — Figma frames are desktop. Get mobile/tablet frames, or agree on breakpoint behavior before building. **`NavBar` is the one exception, fixed Sep 2026 (§26)** — every other page's mobile/tablet pass is still open.
 5. Content file's own open items: ~~MSc end date~~ (**About redesign uses `Oct 2023 - Apr 2026` per Figma `node 920-7843`**), KNOCCS/Xoopah metric wording, Spur product count, Behance/LinkedIn URL confirmation.
 6. **Eurowings start date on About** — Figma says `May 2025`, `about.ts` keeps **`May 2024`** (content-file + user override, §7). Figma text is stale here.
 
@@ -553,9 +553,11 @@ dot); title muted to `text-ink/45`. To re-enable: delete the `underConstruction`
   wrapper is now vestigial (nothing reads it).
 
 **Still open:** visual QA (screenshot tool + fine-pointer emulation both down in this env —
-user eyeballing the zoom pace + cursor); mobile/tablet (§8.4). Card routing status (Sep 2026
-update): all six `/work/{cabinblu,wanderlens,cinefatic,classquest,openseat,xoopah}` routes now
-resolve — see §15–19 and §24.
+user eyeballing the zoom pace + cursor); mobile/tablet (§8.4) for the gallery grid itself.
+Card routing status (Sep 2026 update): all six
+`/work/{cabinblu,wanderlens,cinefatic,classquest,openseat,xoopah}` routes now resolve — see
+§15–19 and §24. (The shared `NavBar`'s own mobile overflow, flagged repeatedly across §15–24,
+was fixed Sep 2026 — see §26.)
 
 ---
 
@@ -1017,7 +1019,8 @@ white inner shadows + `#0D0D0D`/0.2 edge; links "Home" full white, "About"/"Work
 - **Fonts:** rendered `main nav.svg` to PNG — the name "Sohaib Bin Kamran" is **Instrument
   Serif** (`font-serif text-[15px]`, matches the footer's use of the same string); links +
   "Say hi" are Satoshi-ish but kept on the existing `font-ui` inherit (user only asked to
-  fix the name).
+  fix the name). **Superseded Sep 2026 (§26): the whole nav, name included, moved to
+  `font-sans` (Satoshi).**
 
 Every page picks this up (shared component).
 
@@ -1210,8 +1213,8 @@ checks and `get_page_text` instead. Top-of-page screenshots worked fine througho
 
 **Still open:** visual QA beyond the hero (scrolled sections checked structurally, not by eye
 live, per the quirk above — user should eyeball Persona, Landscape, Brand, Process, Gallery);
-mobile/tablet (§8.4) — the only overflow found at 375px width is the pre-existing site-wide
-`NavBar` overflow already present on Home, not something this page introduces.
+mobile/tablet (§8.4) for this page's own sections. (The site-wide `NavBar` overflow flagged
+here was fixed Sep 2026 — see §26.)
 
 ### 24.1 Follow-up fixes (Sep 2026)
 
@@ -1338,7 +1341,10 @@ real codebase as an actual React component:
 - **Interaction** — drag-to-rotate with real momentum, scroll-to-zoom (clamped, eased), a
   pause/resume toggle for the idle auto-spin, freezes entirely (spin + momentum) while a
   location popup is open. Uses the site's own hand-drawn `CursorArrow`/`SiteCursor` — no
-  separate cursor was built for this page.
+  separate cursor was built for this page. **Pinch-to-zoom on touch (Sep 2026, §26)** — the
+  original build only wired `wheel` for zoom; single-finger drag-to-rotate worked on touch
+  for free (Pointer Events unify mouse/touch), but a second simultaneous finger had no
+  handler, so mobile users could rotate but never zoom.
 - **Colour fix** — the same texture + lights rendered noticeably flatter here than in the
   prototype. Real cause: the prototype ran on an old Three.js build (r128, loaded via CDN)
   with a naive, non-colour-managed rendering pipeline that happened to look punchier; this
@@ -1354,3 +1360,62 @@ The click-to-open-popup raycasting was hard to verify by driving a real click th
 automation tooling (the beacons are genuinely small, by design) — confirmed correct instead
 by temporarily exposing the scene/camera/raycaster on `window` and reproducing the exact
 click math directly in the console, then removing the debug hook before shipping.
+
+---
+
+## 26. Mobile NavBar + Aerial Mode pinch-zoom (Sep 2026)
+
+User reported the site "not optimized as responsive" on mobile and asked to see the problem
+first. Driving the Browser pane at 375×812 (the screenshot tool worked fine this session —
+§9's flakiness isn't universal) found the root cause: `NavBar` (§21) had **zero breakpoint
+logic** — one flex row carrying the full name, all 4 links, and the "Say hi" button, no
+hamburger. At 375px that row needs ~428px, so `document.documentElement.scrollWidth` (428)
+exceeded `clientWidth` (375): the name clipped off the left edge, "Travel & Photography"
+wrapped awkwardly, "Say hi" pushed toward/past the right edge. Every other Home section
+reflowed fine (they already had responsive classes) — this was a `NavBar`-only gap, matching
+the "pre-existing site-wide NavBar overflow" noted in passing across §15–24.
+
+**Fix** (`components/layout/NavBar.tsx`):
+- Below `md`: name collapses to **"SBK"**, the 4 links + "Say hi" hide, a hamburger button
+  (`md:hidden`) toggles a dropdown panel (`absolute … top-[calc(100%+8px)]`, same glass
+  treatment as the pill) listing all 4 links + "Say hi" stacked. Closes on route change
+  (`useEffect` on `pathname`) and locks `document.body.style.overflow` while open, same
+  pattern as `AerialMode`'s overlay lock.
+- `md:flex` / `hidden md:flex` gate the desktop link row and "Say hi" chip — unchanged above
+  `md`, so the existing glass-pill nav (§21) is untouched on desktop.
+- **Font follow-up** (user caught it from a screenshot): the name span was still
+  `font-serif` (Instrument Serif) — moved to `font-sans` (Satoshi) along with the rest of the
+  nav, which had already been switched from `font-ui` (Inter) to `font-sans` earlier in this
+  pass per a direct ask ("make Satoshi for the nav bar, mobile and desktop"). §21's "name is
+  Instrument Serif" note is now stale — see the strikethrough there.
+- **Alignment follow-up** (user design question, answered then actioned): the mobile pill +
+  hamburger were still centred (`flex justify-center` on the `<header>`, inherited from
+  desktop). Changed to `justify-start md:justify-center` — a small centred pill floating alone
+  read as orphaned on a phone screen; left-aligned logo + hamburger is the expected mobile
+  pattern and gives it a clearer anchor. Desktop keeps the centred pill unchanged.
+- Verified live at 375×812: `scrollWidth === clientWidth === 375` (no overflow), hamburger
+  opens/closes, dropdown links navigate + close the menu, `getComputedStyle(nav).fontFamily`
+  resolves to `Satoshi, Inter, "Inter Fallback", sans-serif`. Desktop re-checked unchanged
+  after every edit (still centred, still Instrument-Serif-free).
+
+**Aerial Mode pinch-zoom** (`components/travel/AerialMode.tsx`, §25) — separately reported by
+the user: "the user cannot pinch the earth to zoom out or zoom in." Cause: zoom was wired only
+to the `wheel` event (desktop mice/trackpads); rotation used Pointer Events, which unify
+mouse/touch/pen, so single-finger drag-to-rotate worked on touch for free, but nothing tracked
+a *second* simultaneous pointer, so pinch had no effect and the browser's default touch-action
+was free to hijack the gesture as a page zoom instead.
+
+- Added an `activeTouches` map keyed by `pointerId`, populated on `pointerdown` /
+  `pointermove` / `pointerup` / `pointercancel` (filtered to `pointerType === "touch"`). When
+  a second touch joins, drag-rotation is suspended (`dragging = false`) and the distance
+  between the two touch points is tracked; subsequent moves scale `camTargetDist` by
+  `pinchStartDist / currentDist`, clamped to the same `ZOOM_MIN`/`ZOOM_MAX` the wheel handler
+  uses — same zoom variable, two input paths.
+- Added `touch-none` (CSS `touch-action: none`) to the stage `<div>` so the browser doesn't
+  intercept the second finger for its own native pinch-zoom before the JS handler sees it.
+- Updated the on-screen hint copy: "SCROLL TO ZOOM" → "SCROLL / PINCH TO ZOOM".
+- Verified by dispatching synthetic two-pointer `PointerEvent`s (`pointerType: "touch"`)
+  through `javascript_tool` — the real gesture can't be driven through the automation tooling,
+  but this exercises the exact same event listeners a real pinch would. Confirmed both
+  directions: fingers moving apart zoomed in (globe filled the viewport), fingers moving
+  together zoomed back out (visible curvature returned) — screenshotted before/after each.
