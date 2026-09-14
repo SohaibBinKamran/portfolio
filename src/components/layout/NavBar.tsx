@@ -7,6 +7,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/work", label: "Work" },
+  { href: "/travel-photography", label: "Travel & Photography" },
 ];
 
 /** corner-down-right — the "Say hi" glyph from `main nav.svg`. */

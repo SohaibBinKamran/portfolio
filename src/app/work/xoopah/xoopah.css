@@ -1,0 +1,63 @@
+/* Xoopah case study — scoped design tokens + type.
+   "Calm hustle" purple system from Figma node 1050-16034 (Portfolio/Xoopah-Overview).
+   Not part of the site design system — everything is namespaced under `.xoopah`.
+   Headings + body reuse the self-hosted Circular Std (--font-cabinblu-sans);
+   eyebrows/labels reuse JetBrains Mono (--font-cabinblu-mono) — no new fonts added. */
+
+.xoopah {
+  /* Surfaces */
+  --xo-bg: #ffffff;
+  --xo-tint: #f5f0fc; /* lavender section wash */
+  --xo-card: #ffffff;
+  --xo-dark: #4e2e8f; /* deep purple panels */
+
+  /* Ink */
+  --xo-ink: #241338; /* headings */
+  --xo-body: #4a3a63; /* body copy */
+  --xo-muted: #6b5a8a; /* captions, meta */
+
+  /* Accents */
+  --xo-purple: #8155c9; /* primary accent */
+  --xo-purple-deep: #4e2e8f;
+  --xo-mint: #4bea5e; /* Spark Mint */
+  --xo-pink: #ffb9e8; /* Spark Pink */
+  --xo-border: rgba(36, 19, 56, 0.14);
+
+  /* Type */
+  --xo-sans: var(--font-cabinblu-sans), "Circular Std", var(--font-inter), sans-serif;
+  --xo-mono: var(--font-cabinblu-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  background: var(--xo-bg);
+  color: var(--xo-body);
+  font-family: var(--xo-sans);
+  scroll-behavior: smooth;
+}
+
+.xoopah h1,
+.xoopah h2,
+.xoopah h3,
+.xoopah h4 {
+  font-family: var(--xo-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--xo-ink);
+}
+
+.xoopah .xo-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--xo-mono);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12.5px;
+  color: var(--xo-purple-deep);
+}
+
+.xoopah .xo-eyebrow::before {
+  content: "";
+  width: 16px;
+  height: 1.5px;
+  background: var(--xo-purple);
+}

@@ -109,3 +109,49 @@ h1, h2, h3, h4, h5, h6 {
     cursor: none !important;
   }
 }
+
+/*
+ * Aerial Mode (components/travel/AerialMode.tsx) positions these itself,
+ * every frame, from the globe's 3D pin/country-label positions — plain DOM
+ * nodes created imperatively alongside the WebGL canvas, not React-rendered.
+ */
+.aerial-pin-label {
+  position: fixed;
+  z-index: 108;
+  pointer-events: none;
+  transform: translate(-50%, -130%);
+  font-family: var(--font-ui), "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(252, 249, 245, 0.9);
+  background: rgba(13, 13, 13, 0.7);
+  border: 1px solid rgba(255, 49, 49, 0.4);
+  padding: 4px 9px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.aerial-pin-label.show {
+  opacity: 1;
+}
+.aerial-country-label {
+  position: fixed;
+  z-index: 106;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-ui), "Inter", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+  color: rgba(197, 255, 82, 0.92);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9), 0 0 16px rgba(197, 255, 82, 0.22);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.aerial-country-label.show {
+  opacity: 1;
+}

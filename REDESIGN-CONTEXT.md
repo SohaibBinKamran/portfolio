@@ -83,7 +83,9 @@ Colours: read solid `fill="#…"` / `stop-color` from the SVG, or `get_variable_
 | ClassQuest case study | `/work/classquest` | **Built ✅ (Aug 2026)** — matched to Figma `node 869-9558` + `ClassQuest-CaseStudy.svg`. See §17. |
 | OpenSeat case study | `/work/openseat` | **Built ✅ (Aug 2026)** — matched to Figma `node 869-11269` + `Redesign July/OpenSeat-Project.svg` (fresh Aug 28). See §19. |
 | Contact | `/contact` | **Built ✅ (Aug 2026)** — matched to Figma `node 968-1662` + `Redesign July/GetInTouch.svg`. See §22. |
-| Other case studies | `/work/[slug]` | **Not built** — no generic template exists. The redesigned `/work` index links CabinBlu, Cinefatic, ClassQuest, WanderLens, OpenSeat, Xoopah; `/work/{cabinblu,wanderlens,cinefatic,classquest,openseat}` resolve. |
+| Xoopah case study | `/work/xoopah` | **Built ✅ (Sep 2026)** — matched to Figma `node 1050-16034`. See §24. |
+| Travel & Photography | `/travel-photography` | **Built ✅ (Sep 2026)** — not from Figma, built from scratch across a long iterative session with the user. 63 real photos, an "Aerial Mode" WebGL globe of everywhere visited. See §25. |
+| Other case studies | `/work/[slug]` | **Not built** — no generic template exists. The redesigned `/work` index links CabinBlu, Cinefatic, ClassQuest, WanderLens, OpenSeat, Xoopah — all six now resolve. |
 
 **When building a new page, reuse the shared primitives the Home redesign established (§6) and the verified tokens (§5) — don't reinvent them.**
 
@@ -264,6 +266,20 @@ for the SSR HTML. Then **tell the user you couldn't see it and ask them to eyeba
   The Cinefatic pass caught a wrong bg hex, a wrong button label, and an over-clamped quote
   width this way. (SVG text is outlined, but the layout, colours and raster content read fine.)
 
+- **(Sep 2026) The screenshot tool DID work in one session** — so "times out every session"
+  above isn't universal. But even when the pane renders, **`requestAnimationFrame` does not
+  run at all while the pane is hidden/unfocused** (confirmed directly — a bare rAF loop never
+  ticked; the tool reported "Browser pane is currently hidden"). Framer Motion's tween/spring/
+  keyframe engine is rAF-driven, so **every Framer-animated element sits frozen at its
+  `initial` style** for as long as the pane stays backgrounded — this looks exactly like "my
+  new animation is broken" but isn't (cost a lot of back-and-forth on a since-discarded
+  feature before landing on this). Plain CSS `@keyframes` (Marquee, WhyMe icon loops)
+  and `<video>`/decoder playback are unaffected (compositor/decoder-driven, not rAF). **Don't
+  trust "it's not animating" from `getAnimations()` / polled inline-style snapshots as proof
+  of a code bug — check `document.hidden` / try a raw rAF probe first**, and if the pane is
+  hidden, verify the *logic* (state transitions, event firing via `console.log`, DOM
+  structure) instead of the *motion*, then tell the user to eyeball the actual timing live.
+
 Before finishing a page: `curl` the route = 200, SSR HTML contains every section's text, no
 *fresh* server errors in `preview_logs`, images serve via the `_next/image` curl check, links
 point at real routes.
@@ -285,10 +301,11 @@ bg), "Available Now!" pill, `Get in Touch!` heading, Name/Company/Email/Message 
 Web3Forms (`NEXT_PUBLIC_WEB3FORMS_KEY`), "Or email me directly" chip. Tested live.
 
 **Case studies** — bespoke-per-project (§8.3). Reference builds: WanderLens (§15),
-Cinefatic (§16), ClassQuest (§17), CabinBlu (§18). Still to build: OpenSeat, Xoopah.
-Each needs a node-specific Figma link. Fonts beyond the site set get added to `layout.tsx`
-scoped by a comment (Cinefatic added Bebas Neue + Caveat; WanderLens added Mulish;
-ClassQuest added none — it reuses Circular Std + JetBrains Mono).
+Cinefatic (§16), ClassQuest (§17), CabinBlu (§18), OpenSeat (§19), Xoopah (§24) — all six
+`/work` projects now have a built case study. Each needs a node-specific Figma link. Fonts
+beyond the site set get added to `layout.tsx` scoped by a comment (Cinefatic added Bebas
+Neue + Caveat; WanderLens added Mulish; ClassQuest and Xoopah added none — both reuse
+Circular Std + JetBrains Mono).
 
 ---
 
@@ -336,6 +353,10 @@ at correct `rx=16` + both cursor pointers). The Hero cursor path is traced 1:1 f
 Pull new assets from Figma via `get_design_context` / `get_screenshot` on the node, or
 extract embedded rasters from the relevant `Redesign July/*.svg` (see §3). **Ask before
 downloading** — state filename, source, and size first.
+
+**Not from Figma:** `public/images/photography/` (63 real user photos, `.webp`) and
+`public/images/earth-texture.jpg` (a real-Earth equirectangular map, not Figma-sourced —
+see §25). These are the user's own material, not extracted design assets.
 
 ---
 
@@ -483,7 +504,7 @@ promoted site-wide to `ui/SiteCursor` in `layout.tsx`; see §20.)
 **Data** (`data/work.ts`) — rewritten. Lineup + fixed order: **CabinBlu → Cinefatic →
 ClassQuest → WanderLens → OpenSeat → Xoopah** (KNOCCS dropped, ClassQuest added — §8.1).
 `Project` type gained `imageAlt`, `hoverNote` (the handwritten cursor caption), and optional
-`underConstruction` (Xoopah is flagged — its case study isn't built).
+`underConstruction` (now unused — Xoopah's case study is built, see §24).
 
 **Assets** — six `work-*.png` covers rendered from the Figma cover frames (see §11).
 
@@ -515,13 +536,14 @@ Framer Motion component)
   `group-hover`.
 - `useReducedMotion()` drops `whileHover` entirely; the `↗` keeps `motion-reduce:transition-none`.
 
-**Under construction** (Aug 2026) — a `Project` with `underConstruction: true` (currently
-**Xoopah** — case study not built) renders a separate branch in `WorkCard`: a plain `<div>`
+**Under construction** (Aug 2026) — a `Project` with `underConstruction: true` (a project
+whose case study route isn't built yet) renders a separate branch in `WorkCard`: a plain `<div>`
 (not `<Link>`, `cursor-default select-none`), **no** `data-hover-note` (so `SiteCursor` shows
 no caption over it), no Framer hover. Cover is `grayscale opacity-60` under a `bg-[#f0eeeb]/45`
 wash with a centred white/blur `rounded-full` "Under Construction" pill (amber `#f5a623` status
 dot); title muted to `text-ink/45`. To re-enable: delete the `underConstruction` line in
-`work.ts` once the route exists.
+`work.ts` once the route exists. **No project currently uses this branch** — Xoopah's
+`underConstruction` line was removed once `/work/xoopah` shipped (§24).
 
 - **Custom cursor** — ~~`components/work/WorkCursor.tsx`~~ **superseded (Aug 2026): promoted
   to the site-wide `ui/SiteCursor` in `layout.tsx`** (user wanted the custom pointer on every
@@ -531,9 +553,9 @@ dot); title muted to `text-ink/45`. To re-enable: delete the `underConstruction`
   wrapper is now vestigial (nothing reads it).
 
 **Still open:** visual QA (screenshot tool + fine-pointer emulation both down in this env —
-user eyeballing the zoom pace + cursor); mobile/tablet (§8.4). Card routing status:
-`/work/{cabinblu,wanderlens}` resolve; Xoopah is disabled (`underConstruction`);
-`/work/{cinefatic,classquest,openseat}` still 404. (`/work/wanderlens` — see §15.)
+user eyeballing the zoom pace + cursor); mobile/tablet (§8.4). Card routing status (Sep 2026
+update): all six `/work/{cabinblu,wanderlens,cinefatic,classquest,openseat,xoopah}` routes now
+resolve — see §15–19 and §24.
 
 ---
 
@@ -1103,3 +1125,232 @@ Next file convention — the default `favicon.ico` was deleted. Regenerate with 
 the source, contain into ~72% of the canvas, center.
 
 **To update the site:** edit, commit, `git push`. Deploy is automatic.
+
+---
+
+## 24. Xoopah case study changelog (Sep 2026)
+
+Built from Figma `MXxffOc1fNdTbvUBfEVA1z` node `1050-16034` (Portfolio/Xoopah-Overview).
+Xoopah is a **CRM/ops web platform for small businesses** — unifying DMs, orders, reviews and
+payments into one dashboard. **Bespoke, not templated** (same call as every other case study —
+§6/§8.3). `get_variable_defs` returns nothing. This closes out the `/work` lineup — all six
+projects (CabinBlu, Cinefatic, ClassQuest, WanderLens, OpenSeat, Xoopah) now have a built case
+study; `work.ts`'s `underConstruction` flag on Xoopah was removed.
+
+**Style** — calm, confident "hustle" purple system: deep-purple gradient hero/CTA bookends,
+white/lavender content sections, a mint-green + pink accent pair. Headings use Circular Std
+Bold (`--font-cabinblu-sans`, already loaded); eyebrows/labels use JetBrains Mono
+(`--font-cabinblu-mono`). Figma's `get_design_context` names Fraunces as the heading font —
+ignored, same as the ClassQuest/OpenSeat note (§17/§19): the real rendered spans are Circular
+Std. **No new fonts added to `layout.tsx`.**
+
+**Structure** — `page.tsx` composes, under a `.xoopah` scope div: Hero → Problem → Persona →
+Landscape → Brand → Process → Gallery → Close → ClosingCta. The Figma frame's top-level
+children are actually three siblings on the canvas — the main content frame ("Xoopah Final",
+containing Hero through the small "Xoopah — Web Platform Case Study" credit line), a "CTA"
+frame, and a "Container > Footer - Desktop" frame — confirmed by unescaping `get_metadata`'s
+XML dump and checking indentation depth (`node -e` script, not visible from the rendered tree
+alone). The "CTA" frame is pixel-identical to every other case study's shared "Why wait? Take
+the leap..." `ClosingCta` (same copy, same `#121212` bg, same white pill) — reused verbatim
+from `components/openseat/ClosingCta.tsx`. "Footer - Desktop" is the global site footer,
+already handled by `layout.tsx` — not rebuilt. The tiny "Footer" node (69px tall, one text
+line, "Xoopah — Web Platform Case Study") was initially built as a `CaseFooter.tsx` credit
+strip between Close and ClosingCta, then **removed on user feedback** (§24.1) — it read as a
+stray white band with no content value between the two dark sections.
+
+**Scoped system** — `src/app/work/xoopah/xoopah.css`, all under `.xoopah`:
+`--xo-bg #fff` · `--xo-tint #f5f0fc` (lavender section wash) · `--xo-dark #4e2e8f` ·
+`--xo-ink #241338` (headings) · `--xo-body #4a3a63` · `--xo-muted #6b5a8a` ·
+`--xo-purple #8155c9` (primary accent) · `--xo-purple-deep #4e2e8f` · `--xo-mint #4bea5e`
+(Spark Mint) · `--xo-pink #ffb9e8` (Spark Pink) · `--xo-border rgba(36,19,56,0.14)`.
+`.xo-eyebrow` carries the dash divider via `::before`. Section rhythm `py-16 md:py-[88px]`,
+content `max-w-[1120px]` (Figma's content col).
+
+**Dark-section headings** — same gotcha as every prior case study (§15–19): `.xoopah h1..h4`
+sets `color: var(--xo-ink)` at specificity (0,1,0), which beats a plain `text-white` Tailwind
+utility (same specificity, but the scoped stylesheet loads after Tailwind's). Hero's `<h1>` and
+the Landscape/Close dark-panel headings all needed **`!text-white`** — caught by a live browser
+screenshot showing black-on-purple hero text on the first pass, fixed immediately.
+
+**Components** (`src/components/xoopah/`) — `Bits.tsx` (`Section` w/ `tint` prop, `Eyebrow`,
+`SplitHeading` — two-tone heading with a configurable `accentIndex`, since Process's heading
+accents its *middle* span while every other section accents its *last*), `Hero.tsx` (radial
+purple-gradient hero, browser-chrome dashboard mockup, 4 rotated floating stat cards
+absolutely positioned around it — hidden below `sm` to avoid mobile clutter), `Problem.tsx`
+(5 rotated sticky-note cards), `Persona.tsx` (Gwen Stacy card + goals/frustrations pill rows +
+4 driver progress bars), `Landscape.tsx` (dark rounded panel, 5 pill badges with real Figma
+icon SVGs), `Brand.tsx` (palette swatches + type specimen card), `Process.tsx` (3-step
+sketch → wireframe → final, arrow separators), `Gallery.tsx` (6 rotated product-screenshot
+cards, "Six Jobs. One Platform."), `Close.tsx` (purple-gradient stat band), `ClosingCta.tsx`
+(copy-pasted from OpenSeat's, since the Figma CTA frame is identical). Copy in
+`src/data/xoopah.ts` (verbatim from Figma, reuse approved §7). `CaseFooter.tsx` and its
+`caseFooter` data export existed briefly and were deleted — see §24.1.
+
+**Assets** — `public/images/xoopah/` (22 files): 12 raster images pulled from
+`get_design_context` asset URLs and downscaled with `sharp` (hero dashboard screenshot,
+persona photo, 3 process-step images, 6 gallery product screenshots, 1 CTA glow eclipse — same
+`sharp` + temp-file-then-rename pattern as prior passes, since writing straight over the
+source file mid-stream threw an `UNKNOWN` fs error on Windows); 10 small decorative SVGs kept
+at native size and referenced directly by `<img>` (hero corner-badge icons, Landscape's 5
+category icons) — these are simple, exportable Figma vectors, not redrawn.
+
+**Verified (Sep 2026, live in-browser)** — `next dev` on this session's own `:3000`; `/work/xoopah/`
+= 200, SSR text carries every section's copy (checked via `get_page_text`); all 22 images load
+200 (confirmed via `read_network_requests` — `next.config.ts`'s `images.unoptimized` means they
+serve as raw `/images/xoopah/*` requests, not through `/_next/image`, so a direct `_next/image`
+curl check isn't meaningful here); no console errors; no horizontal overflow at 1280px. The
+Hero's white-heading fix (above) was caught and confirmed via a live screenshot. `/work` index's
+Xoopah card now links to a real page (verified by clicking through in-browser) instead of
+rendering the grayed-out "Under Construction" state.
+
+**Known env quirk hit again:** screenshots taken after `window.scrollTo` to a non-zero offset
+came back blank white (compositor issue, not a code bug — matches §9's documented flakiness);
+confirmed the affected sections render correctly via `getComputedStyle`/`getBoundingClientRect`
+checks and `get_page_text` instead. Top-of-page screenshots worked fine throughout.
+
+**Still open:** visual QA beyond the hero (scrolled sections checked structurally, not by eye
+live, per the quirk above — user should eyeball Persona, Landscape, Brand, Process, Gallery);
+mobile/tablet (§8.4) — the only overflow found at 375px width is the pre-existing site-wide
+`NavBar` overflow already present on Home, not something this page introduces.
+
+### 24.1 Follow-up fixes (Sep 2026)
+
+**Removed the CaseFooter credit strip.** User flagged it as a stray white band (with the
+"XOOPAH — WEB PLATFORM CASE STUDY" text) sitting between the purple Close section and the dark
+ClosingCta — screenshotted and asked for it to go. Deleted `components/xoopah/CaseFooter.tsx`,
+its `<CaseFooter />` usage in `page.tsx`, and the now-unused `caseFooter` export in
+`data/xoopah.ts`. Verified via `getBoundingClientRect` that Close's bottom edge and ClosingCta's
+top edge now sit at the same y (zero gap) — the page.tsx flow is now Hero → Problem → Persona →
+Landscape → Brand → Process → Gallery → Close → ClosingCta, matching the list above.
+
+**Typography audit against Figma.** User asked to match font properties site-wide on this page
+against the Figma spec. Went back through every `get_design_context` response for the page and
+compared font-size/line-height/letter-spacing/weight against what shipped. Most of the page was
+already correct (Circular Std Bold headings, Book body, JetBrains Mono labels — all forced by
+the shared `.xoopah h1..h4` rule and per-element classes), but found and fixed real mismatches:
+
+- **Hero `<h1>`** — was capped at `md:text-[64px]`, Figma is `72px`; added an `lg:text-[72px]`
+  step and corrected `leading-[1.05]` → `leading-[1.03]` (Figma's `74.16/72`). Also dropped a
+  dead `tracking-[-0.02em]` class — the scoped `.xoopah h1..h4 { letter-spacing: -0.01em }` rule
+  already wins on specificity over any plain Tailwind tracking utility on a heading, and `-1%`
+  is the exact ratio every Figma heading in this file actually uses (`-0.42/42`, `-0.72/72`,
+  `-0.44/44` all reduce to `0.01`), so the override was inert but is worth knowing about if a
+  future heading here ever needs a *different* ratio — it'll need `!tracking-[...]`.
+- **Letter-spacing ratio mismatches** (component used a plausible-looking value that didn't
+  match the source): Hero stat labels `0.03em → 0.05em`; Persona card role `0.03em → 0.05em`
+  and the Goals/Frustrations/What-drives-her mono labels `0.04em → 0.08em`; Landscape pill
+  badges `0.01em → 0.03em`; Brand's two specimen labels `0.04em → 0.08em`; Process step numbers
+  (01/02/03) `0.03em → 0.06em`; Close's stat labels `0.03em → 0.05em`. Each was derived by
+  dividing Figma's `tracking-[Npx]` by its `text-[Mpx]` from the original `get_design_context`
+  output and converting to the matching `em` value.
+- **Line-height**: Hero stat-card value (`3,351`, `35`, …) had no explicit `leading-*`, so it
+  inherited the browser default (~1.2) against Figma's tight `19/19 = 1` — added `leading-[1]`.
+  Persona card body copy `leading-[1.5] → leading-[1.55]` (Figma `20.93/13.5`). Brand's display
+  specimen ("Grow the business.") `leading-[1.15] → leading-[1.1]` (Figma `33/30`).
+- Verified the fixes with `getComputedStyle` in a live browser session rather than trusting the
+  source diff alone — confirmed `<h1>` computes to exactly `72px` / `-0.72px` / `74.16px` /
+  `700`, and spot-checked the persona role, Goals label, and step-01 number all resolve to the
+  precise Figma `letter-spacing` px value.
+
+**Still open:** the same visual-QA gap as above — the letter-spacing/line-height fixes were
+verified via computed styles, not by eye, for the sections below the hero fold.
+
+---
+
+## 25. Travel & Photography + Aerial Mode (Sep 2026)
+
+**Not a Figma page.** Built from scratch across a long iterative session directly with the
+user — no design spec, no node ID to match. Route: `/travel-photography` (renamed mid-build
+from `/photography` — nothing was live yet, so the URL itself changed, not just the label).
+
+**Homepage teaser** — `components/home/OffDuty.tsx`, a new section between `Process` and
+`ClosingCta`. "Beyond the pixels" eyebrow, "Same eye, no design system." heading, and a
+fanned three-print polaroid stack (`framer-motion` `whileHover` variants) that spreads wider
+on hover like a hand of photos opening. The three prints are a fixed, deliberately curated
+trio pulled by id (`STACK_IDS = ["berlin-08", "madrid-05", "baku-02"]`) — one per country —
+not `photography.slice(0, 3)`, which would've been three Baku photos in a row since the data
+is ordered alphabetically by city.
+
+**The full roll** — `app/travel-photography/page.tsx` + `components/photography/MasonryWall.tsx`
++ `Lightbox.tsx`. A real CSS-columns masonry grid; the whole card (not just the image) scales
+and lifts `z-index` on hover so it visibly pops over its neighbours. Click opens `Lightbox.tsx`
+— a "film mount" treatment (black border, inset shadow) with `roll` (the country) printed
+bottom-left and `location` (the city) bottom-right, mono, like a contact-sheet stamp. The
+frame's aspect ratio follows each photo's own shape (`landscape`/`portrait`/`square` buckets
+in the data) rather than forcing every photo into one fixed box — most of these are portrait
+phone shots, so a fixed landscape frame would've cropped heavily.
+
+**`data/photography.ts`** — 63 real photos across 9 cities (Baku, Berlin, Cologne, Dortmund,
+Karachi, Lahore, Madrid, Palma de Mallorca, Siegen). `Photo.src`/`swatch`/`date` are all
+optional: `src` (a real `/images/photography/*.webp` path) is preferred wherever set, `swatch`
+(a CSS gradient) is the fallback for a photo that doesn't exist yet, and `date` is left off
+entirely rather than fabricated — EXIF (including capture date) didn't survive the original
+HEIC → JPEG conversion. Add real dates back per-photo only if the user supplies them.
+
+**Format history, in order:**
+1. User dropped 63 originals into `public/images/photography/` — a mix of `.jpg` and
+   `.HEIC` (iPhone), one `.MOV` (skipped — video, not a photo).
+2. `sharp` could read HEIC *metadata* but not decode the pixel data — `"Support for this
+   compression format has not been built in"` (the prebuilt libvips binary lacks the HEVC
+   codec). Fixed with `heic-convert` (a WASM libheif decoder, `npm install --no-save` — a
+   one-time conversion tool, never added to `package.json`; re-install it temporarily if more
+   HEIC photos ever need converting) piped into `sharp` for a `.rotate()` (real EXIF
+   auto-orient) + resize (2200px long edge) + `.jpeg({ quality: 82, mozjpeg: true })` pass.
+   Renamed to a clean `city-01.jpg` scheme in the process.
+3. **(This pass, Sep 2026)** User re-encoded all 63 `.jpg` → `.webp` themselves and replaced
+   them in place, same filenames. `data/photography.ts` updated (all 63 `src` paths) to
+   match — a straight extension swap, no other changes needed since `next.config.ts` already
+   has `images.unoptimized: true` (static export), so these serve as plain `<img>` requests
+   either way; `.webp` needed no config change.
+
+**Aerial Mode** — `components/travel/AerialMode.tsx`, opened from a small "Aerial Mode"
+button on `/travel-photography` (placed right after the intro paragraph, back-arrow-before-
+title to close rather than a corner ✕ — a corner ✕ collided with the country/city/frame
+stat numbers in the same corner). A full-screen WebGL globe of every place visited, built by
+porting a working prototype (iterated live as a published Claude Artifact first) into the
+real codebase as an actual React component:
+
+- **`three` is a real dependency now** (`npm install three` + `@types/three` as a dev dep —
+  modern three.js ships no bundled `.d.ts`). Not a CDN script tag like the prototype used.
+- **`data/places.ts`** — 23 real places, 6 countries (Saudi Arabia, Pakistan, Spain, Germany,
+  Czechia, Azerbaijan), approximate public lat/lon per city, grouped by `trip` (same-trip
+  cities get a thin connecting line on the globe). Cross-referenced against
+  `data/photography.ts` by matching `location`: a pin shows a real photo-count badge and
+  opens a real slideshow where photos exist (9 of the 23 cities); the other 14 get an honest
+  "Nothing here yet" empty state instead of a fabricated one.
+- **The globe itself** — `public/images/earth-texture.jpg`, the same real-Earth equirectangular
+  texture Three.js's own official examples ship with (not a Figma asset, not hand-painted — an
+  earlier hand-painted-continents version was tried and rejected by the user as looking
+  "painted by a kid"). `MeshPhongMaterial` + ambient/directional lights, a faint lat/long
+  graticule overlay, a soft backface atmosphere-glow shell.
+- **Pins** — small red blinking beacons (each on its own out-of-sync phase), not the site's
+  usual lime accent — deliberately small and deliberately *not* auto-spread apart. An earlier
+  version auto-declustered tightly-packed real-world pins (e.g. the Islamabad/Kashmir/
+  Balakot/Mansehra/Murree cluster, all within ~110km of each other) into a small rosette —
+  reverted after it physically misplaced Lahore's dot across the India border, since Lahore
+  sits only ~24km from it. **Every pin is now at its exact true lat/lon, full stop** — clutter
+  is handled by keeping beacons small and by scroll-to-zoom, never by moving a pin's position.
+- **Sky** — four layers of twinkling stars (each layer's opacity on its own sine, so the
+  shimmer isn't synchronized), a tilted galactic band (points biased toward a plane, purple/
+  lime/white tint), and a small pool of shooting stars firing on a random 2.5–8.5s interval.
+  Lives in its own `skyGroup` (separate from the globe's rotation group) so dragging the
+  Earth never drags the sky with it.
+- **Interaction** — drag-to-rotate with real momentum, scroll-to-zoom (clamped, eased), a
+  pause/resume toggle for the idle auto-spin, freezes entirely (spin + momentum) while a
+  location popup is open. Uses the site's own hand-drawn `CursorArrow`/`SiteCursor` — no
+  separate cursor was built for this page.
+- **Colour fix** — the same texture + lights rendered noticeably flatter here than in the
+  prototype. Real cause: the prototype ran on an old Three.js build (r128, loaded via CDN)
+  with a naive, non-colour-managed rendering pipeline that happened to look punchier; this
+  build runs current Three.js (0.186), whose *correct* colour-managed pipeline is more
+  physically accurate but reads duller for the same inputs. Not a bug to fix internally —
+  fixed with a CSS filter directly on the canvas element
+  (`saturate(1.55) contrast(1.08) brightness(1.04)`), which reliably punches the output back
+  up regardless of the internal colour-space math.
+
+**Verification** — every pass type-checked clean (`npx tsc --noEmit`) and a full
+`npm run build` (static export) was run after each substantive change, not just `next dev`.
+The click-to-open-popup raycasting was hard to verify by driving a real click through the
+automation tooling (the beacons are genuinely small, by design) — confirmed correct instead
+by temporarily exposing the scene/camera/raycaster on `window` and reproducing the exact
+click math directly in the console, then removing the debug hook before shipping.

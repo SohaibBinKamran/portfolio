@@ -57,6 +57,5 @@ export const projects: Project[] = [
     image: "/images/work-xoopah.png",
     imageAlt: "Xoopah CRM web platform on a laptop with floating metric cards",
     hoverNote: "dive into the dashboard →",
-    underConstruction: true,
   },
 ];
