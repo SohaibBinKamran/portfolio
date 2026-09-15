@@ -29,6 +29,7 @@ export type TimelineEntry = {
   title: string;
   subtitle: string;
   dates: string;
+  logo?: string;
 };
 
 export const experiences: TimelineEntry[] = [
@@ -36,16 +37,19 @@ export const experiences: TimelineEntry[] = [
     title: "Eurowings Digital",
     subtitle: "Working Student, Digital Product & Communication Management",
     dates: "May 2024 - Present",
+    logo: "/images/logos/eurowings-digital.svg",
   },
   {
     title: "Spur Solutions",
     subtitle: "Junior UX Designer",
     dates: "July 2022 - Sept 2023",
+    logo: "/images/logos/spur-solutions.svg",
   },
   {
-    title: "Google Developers Student Clubs",
-    subtitle: "Co-Lead Design",
-    dates: "Nov 2021 - May 2022",
+    title: "The Vibrators",
+    subtitle: "Lead - Design & Communication",
+    dates: "Aug 2021 - Jun 2022",
+    logo: "/images/logos/the-vibrators.svg",
   },
 ];
 
@@ -54,11 +58,13 @@ export const education: TimelineEntry[] = [
     title: "Masters in Human Computer Interaction (HCI)",
     subtitle: "Universität Siegen",
     dates: "Oct 2023 - Apr 2026",
+    logo: "/images/logos/uni-siegen.svg",
   },
   {
     title: "Bachelors of Science in Computer Science",
     subtitle: "Institute of Business Administration",
     dates: "Aug 2018 - June 2022",
+    logo: "/images/logos/iba.svg",
   },
 ];
 

@@ -27,9 +27,22 @@ export function Timeline({
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-blue ring-4 ring-accent-blue/15" />
             </span>
 
-            <p className="text-[18px] font-bold tracking-tight text-ink">
-              {entry.title}
-            </p>
+            <div className="flex items-center gap-2.5">
+              {entry.logo && (
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border-soft bg-white p-1.5 shadow-soft">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={entry.logo}
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-contain"
+                  />
+                </span>
+              )}
+              <p className="text-[18px] font-bold tracking-tight text-ink">
+                {entry.title}
+              </p>
+            </div>
             <p className="mt-2 font-sans text-base text-ink">{entry.subtitle}</p>
             <p className="mt-1 font-sans text-base text-ink/55">{entry.dates}</p>
           </li>

@@ -1363,7 +1363,7 @@ click math directly in the console, then removing the debug hook before shipping
 
 ---
 
-## 26. Mobile NavBar + Aerial Mode pinch-zoom (Sep 2026)
+## 26. Mobile NavBar + Aerial Mode touch/layout fixes (Sep 2026)
 
 User reported the site "not optimized as responsive" on mobile and asked to see the problem
 first. Driving the Browser pane at 375×812 (the screenshot tool worked fine this session —
@@ -1419,3 +1419,35 @@ was free to hijack the gesture as a page zoom instead.
   but this exercises the exact same event listeners a real pinch would. Confirmed both
   directions: fingers moving apart zoomed in (globe filled the viewport), fingers moving
   together zoomed back out (visible curvature returned) — screenshotted before/after each.
+
+### 26.1 Aerial Mode overlay chrome — mobile layout (Sep 2026)
+
+Both header blocks in the overlay chrome (`GlobeOverlay` in `AerialMode.tsx`) were built
+`absolute left-8/right-8 top-7` with no breakpoint — fine on desktop's wide top edge, broken
+at 375px: "Aerial Mode"/"Everywhere I've been" (left) and the 6/23/63 stat trio (right) sat
+close enough to collide, and a screenshot from the user's own phone confirmed it. Fixed in
+two rounds, both screenshotted live on the user's device:
+
+- **Round 1 (rejected approach):** tried reflowing the stats into a horizontal row *below*
+  the title on narrow screens (`flex-col` outer wrapper) — this cleared the collision but the
+  user didn't want the stats leaving the corner or changing shape.
+- **Round 2 (shipped):** kept both blocks pinned to their own absolute corner
+  (`left-4`/`right-4 top-4`, widening to `sm:left-8`/`sm:right-8 sm:top-7`, unchanged from the
+  original desktop values) — no reflow between them needed once the *right* block stopped
+  needing full row width. Each stat kept its original structure and size exactly
+  (`font-mono text-xl text-[#c5ff52]` number over a `text-[9px]` mono label, both
+  `text-right`) — the fix is `flex-col items-end` instead of `flex-row` on the outer stats
+  wrapper below `sm`, `sm:flex-row sm:gap-6` restoring the desktop row. A narrow right-aligned
+  column of three number-over-label blocks never comes near the left title block regardless
+  of viewport width, so no reflow trigger is needed either.
+- **Bottom control bar** (`DRAG TO ROTATE · SCROLL / PINCH TO ZOOM · CLICK A PIN`) had the
+  same class of bug: its wrapper was `absolute bottom-7 left-0 right-0` — full viewport width,
+  zero side gutter — so the pill's `px-4` inner padding was the only thing between its text
+  and the screen edge, and at 375px the copy wraps to two lines with no breathing room on
+  either side (confirmed by another user screenshot). Changed the wrapper to
+  `inset-x-4 sm:inset-x-8` (matching the header blocks' gutter) and added `min-w-0` to the
+  pill + `shrink-0` to the pause button so the pill (not the button) absorbs the width
+  constraint and wraps its own text centred, instead of the flex row overflowing edge-to-edge.
+- Verified at 375×812: pill sits with a real ~24px gutter off each edge instead of flush
+  against it, wraps its two-line copy centred, pause button stays a fixed circle. Desktop
+  (both rounds) re-screenshotted unchanged — same absolute corners, same single-line pill.

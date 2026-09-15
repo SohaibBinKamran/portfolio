@@ -590,7 +590,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
       <div ref={labelsRef} />
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-8 top-7 flex flex-col gap-1.5">
+        <div className="absolute left-4 top-4 flex flex-col gap-1.5 sm:left-8 sm:top-7">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -606,28 +606,28 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
             Everywhere I&rsquo;ve been
           </span>
         </div>
-        <div className="absolute right-8 top-7 flex gap-6 text-right">
+        <div className="absolute right-4 top-4 flex flex-col items-end gap-2.5 sm:right-8 sm:top-7 sm:flex-row sm:gap-6">
           <div>
-            <div className="font-mono text-xl text-[#c5ff52]">
+            <div className="text-right font-mono text-xl text-[#c5ff52]">
               {new Set(places.map((p) => p.country)).size}
             </div>
-            <div className="font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Countries</div>
+            <div className="text-right font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Countries</div>
           </div>
           <div>
-            <div className="font-mono text-xl text-[#c5ff52]">{places.length}</div>
-            <div className="font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Cities</div>
+            <div className="text-right font-mono text-xl text-[#c5ff52]">{places.length}</div>
+            <div className="text-right font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Cities</div>
           </div>
           <div>
-            <div className="font-mono text-xl text-[#c5ff52]">{photography.length}</div>
-            <div className="font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Frames</div>
+            <div className="text-right font-mono text-xl text-[#c5ff52]">{photography.length}</div>
+            <div className="text-right font-sans text-[9px] uppercase tracking-[0.14em] text-white/45">Frames</div>
           </div>
         </div>
-        <div className="absolute bottom-7 left-0 right-0 flex items-center justify-center gap-2.5">
+        <div className="absolute inset-x-4 bottom-7 flex items-center justify-center gap-2.5 sm:inset-x-8">
           <button
             type="button"
             onClick={() => setPaused((v) => !v)}
             aria-label={paused ? "Resume rotation" : "Pause rotation"}
-            className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
+            className="pointer-events-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/75 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white"
           >
             {paused ? (
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l15 8-15 8V4z" /></svg>
@@ -635,7 +635,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="5" height="16" rx="1" /><rect x="14" y="4" width="5" height="16" rx="1" /></svg>
             )}
           </button>
-          <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-[11px] tracking-[0.08em] text-white/55 backdrop-blur-md">
+          <div className="min-w-0 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-center font-mono text-[11px] tracking-[0.08em] text-white/55 backdrop-blur-md">
             DRAG TO ROTATE &middot; SCROLL / PINCH TO ZOOM &middot; CLICK A PIN
           </div>
         </div>

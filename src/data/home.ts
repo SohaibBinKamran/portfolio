@@ -70,6 +70,7 @@ export const organizations = [
   { name: "Packages Limited", logo: "/images/org-packages.png" },
   { name: "Eurowings Digital", logo: "/images/org-eurowings.png" },
   { name: "Spur Solutions", logo: "/images/org-spursol.png" },
+  { name: "The Vibrators", logo: "/images/org-vibrators.svg" },
 ];
 
 export const whyMe = [
