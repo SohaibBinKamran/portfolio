@@ -22,7 +22,7 @@ export const bio = {
   headingMuted: "Lifelong learner.",
   whoHeading: "Who am I?",
   bioText:
-    "I am a product designer with over 3 years of experience delivering B2C, B2B, and SaaS products. My expertise is in full-stack design, from discovery to delivery, including user research, information architecture, and design systems. I specialize in using data-driven experimentation while partnering with cross-functional teams and leadership to align design with business goals.",
+    "I am a product designer with 4+ years of experience delivering B2C, B2B, and SaaS products. My expertise is in full-stack design, from discovery to delivery, including user research, information architecture, and design systems. I specialize in using data-driven experimentation while partnering with cross-functional teams and leadership to align design with business goals.",
 };
 
 export type TimelineEntry = {

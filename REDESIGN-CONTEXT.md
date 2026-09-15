@@ -336,6 +336,9 @@ rendered layout cross-check, not for asset extraction.
   faded to white from the centre outward. Full-bleed `object-cover` (hero aspect ≈ 1440/584,
   matches the asset), no CSS gradient needed. Source: `about me header.svg` pattern fill.
 - `portrait-suit.png` — About portrait (suit photo, 1122×1402). Source: `AboutMe.svg`.
+- `logos/{eurowings-digital,spur-solutions,the-vibrators,uni-siegen,iba}.svg` — small
+  icon-only org/university marks for the Experiences/Education `Timeline` (Sep 2026, user
+  supplied the SVGs directly, not extracted from a Figma export).
 
 **Added in the Home pass** (pulled from Figma live + extracted from `Home.svg`):
 - `hero-sky.png` — hero + Skills-card background (the painterly cloud/coast scene)
@@ -456,6 +459,18 @@ nothing (no published vars). Page is 3 sections; `page.tsx` unchanged (still com
 per-feature `emphasis` keyword (bolded inline in the bento bodies), `bio.whoHeading`.
 Eurowings kept at **May 2024** (Figma's `May 2025` is stale — §7, §8.6). Feature titles
 already matched the design.
+
+**Iterated after first pass (user requests, Sep 2026):**
+- Third experience entry is no longer GDSC — replaced with **"The Vibrators"** /
+  "Lead - Design & Communication" / `Aug 2021 - Jun 2022`.
+- `TimelineEntry` gained an optional `logo` field. Every experience **and** education entry
+  now shows a small org/university mark: `public/images/logos/{eurowings-digital,
+  spur-solutions,the-vibrators,uni-siegen,iba}.svg` — icon-only marks, distinct from the
+  wordmark logos in `public/images/org-*.png|svg` used by Home's org marquee. Rendered in
+  `Timeline.tsx` as a `h-8 w-8` white `rounded-lg` bordered badge (`shadow-soft`,
+  `object-contain`) to the left of the title — **tried removing the badge for a bare
+  larger icon, user preferred the badge, reverted.**
+- `bio.bioText` — "over 3 years of experience" → **"4+ years of experience"**.
 
 **AboutHero** (`components/about/AboutHero.tsx`)
 - Background is the **pre-baked** `about-hero-bg.png` (grayscale sky, centre-out white fade
