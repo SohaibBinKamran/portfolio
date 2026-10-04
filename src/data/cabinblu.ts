@@ -352,18 +352,6 @@ export const closingCta = {
   cta: "Let's Talk?",
 };
 
-export const pinGate = {
-  kicker: "Boarding Pass - Case Study",
-  classTag: "Restricted Gate",
-  gateLabel: "Gate - D0-D14",
-  heading: "Private Case Study",
-  subheading: "Enter 6-Digit Boarding PIN",
-  requestLabel: "Request PIN",
-  requestHref: "/contact",
-  errorMessage: "That PIN didn't check out. Try again.",
-  success: "PIN accepted — cleared for boarding.",
-};
-
 export const caseStudyFooter = {
   heading: "Final call for boarding ✈️",
   body: "Full transcripts, the Condens report, and the workshop deck are available on request.",

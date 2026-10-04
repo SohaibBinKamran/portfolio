@@ -854,6 +854,8 @@ with the phone off-centre by up to 23px, which `object-contain` scaled inconsist
   (`w=121.54 h=176.16 top=-65.21 left=-8.95`, `aspectRatio: 1120/258`) to show only the
   `~40% / ~30% / ~240M` row, per the SVG.
 
+> **REMOVED (Oct 2026):** the PIN gate below was taken out at the user's request — `PinGate.tsx` + the `pinGate` copy are deleted and `page.tsx` renders all sections directly again (public, no blur). Kept below as history only.
+
 **PIN gate** (`components/cabinblu/PinGate.tsx`, client + `pinGate` copy in `data/cabinblu.ts`)
 — the page is public only through `FlightPlan` (`02 · Flight Plan`). `PinGate` renders the 8
 remaining sections (Findings → ClosingCta) but, while locked, blurs them (`blur-[8px]
