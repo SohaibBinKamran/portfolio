@@ -1,0 +1,360 @@
+/* Arrivals Board case study — scoped design tokens + the playable board's two skins.
+   Bespoke "departures board" palette; not part of the site design system —
+   everything is namespaced under `.arrivals`.
+   Headings use Circular Std (--font-cabinblu-sans); labels, numbers and the
+   split-flap digits use JetBrains Mono (--font-cabinblu-mono). Both are already
+   loaded in layout.tsx, so this page adds no new fonts. */
+
+.arrivals {
+  --ar-bg: #12100e;
+  --ar-panel: #1c1915;
+  --ar-panel-2: #24201a;
+  --ar-rule: #3a342b;
+  --ar-ink: #f4ecda;
+  --ar-body: #bdb29a;
+  --ar-dim: #8a806b;
+  --ar-amber: #f0a83b;
+  --ar-amber-deep: #8a5f22;
+  --ar-flap: #26221c;
+  --ar-flap-edge: #0c0a08;
+  --ar-open: #6fd0a0;
+  --ar-partial: #f0a83b;
+  --ar-closed: #e0805a;
+
+  --ar-sans: var(--font-cabinblu-sans), var(--font-inter), system-ui, sans-serif;
+  --ar-mono: var(--font-cabinblu-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  background: var(--ar-bg);
+  color: var(--ar-body);
+  font-family: var(--ar-sans);
+  scroll-behavior: smooth;
+}
+
+.arrivals h1,
+.arrivals h2,
+.arrivals h3,
+.arrivals h4 {
+  font-family: var(--ar-sans);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ar-ink);
+}
+
+.arrivals .ar-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ar-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 12px;
+  color: var(--ar-amber);
+}
+.arrivals .ar-eyebrow::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--ar-amber);
+}
+
+.arrivals .ar-panel {
+  background: var(--ar-panel);
+  border: 1px solid var(--ar-rule);
+  border-radius: 16px;
+}
+
+.arrivals .ar-mono {
+  font-family: var(--ar-mono);
+}
+
+.arrivals :focus-visible {
+  outline: 2px solid var(--ar-amber);
+  outline-offset: 2px;
+}
+
+/* ---------- split-flap ---------- */
+.arrivals .ar-flaps {
+  display: inline-flex;
+  gap: 2px;
+  perspective: 240px;
+  font-family: var(--ar-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.arrivals .ar-flap {
+  display: inline-block;
+  min-width: 0.82em;
+  padding: 0.08em 0.14em;
+  text-align: center;
+  background: var(--flap-bg, var(--ar-flap));
+  color: var(--flap-fg, var(--ar-ink));
+  border: 1px solid var(--flap-edge, var(--ar-flap-edge));
+  border-radius: 3px;
+  transform-origin: 50% 50%;
+}
+.arrivals .ar-flap.is-tick {
+  animation: ar-flap 0.16s ease;
+}
+.arrivals .ar-flap.is-sep {
+  min-width: 0.3em;
+  padding-inline: 0;
+  background: transparent;
+  border-color: transparent;
+}
+@keyframes ar-flap {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(-90deg); }
+  51% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+@keyframes ar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrivals .ar-flap.is-tick,
+  .arrivals .ar-bar-fill { animation: none !important; }
+  .arrivals .ar-drawer { transition: none !important; }
+}
+
+/* ---------- the playable board: two skins via tokens ---------- */
+.arrivals .ar-board {
+  --b-stage: #12100e;
+  --b-frame: #0c0a08;
+  --b-row: #1d1a16;
+  --b-row-hover: #26221c;
+  --b-row-rule: #3a342b;
+  --b-row-ink: #f4ecda;
+  --b-row-dim: #a89d84;
+  --b-chip-bg: #26221c;
+  --b-chip-fg: #f0a83b;
+  --b-btn: #f0a83b;
+  --b-btn-ink: #1c1305;
+  --b-flap-bg: #26221c;
+  --b-flap-fg: #f4ecda;
+  --b-flap-edge: #0c0a08;
+  --b-drawer: #141210;
+  --b-ink: #f4ecda;
+  --b-dim: #a89d84;
+  --b-faint: #7d735f;
+  --b-panel: #1d1a16;
+  --b-panel-2: #24201a;
+  --b-rule: #3a342b;
+  --b-track: #24201a;
+  --b-accent: #f0a83b;
+  --b-note-bg: #1d1a16;
+  --b-up: #6fd0c5;
+  --b-down: #e0805a;
+  --b-pill-ink: #12100e;
+  --b-seg-on: #f4ecda;
+  --b-seg-on-ink: #141210;
+  --r-bulgaria: #3fbf95;
+  --r-romania: #e0b83d;
+  --r-kosovo: #5b9fd6;
+  --r-serbia: #b48ce0;
+  --r-croatia: #e08a4f;
+  --t-gov: #4fbf7a;
+  --t-press: #5b9fd6;
+  --t-est: #c98a4a;
+  --t-gov-fill: var(--t-gov);
+  --t-est-fill: transparent;
+
+  background: var(--b-frame);
+  border-radius: 20px;
+  padding: 8px;
+  transition: background 0.3s ease;
+}
+
+.arrivals .ar-board[data-skin="brand"] {
+  --b-stage: #f8f9fa;
+  --b-frame: #101214;
+  --b-row: #212529;
+  --b-row-hover: #2b3035;
+  --b-row-rule: #495057;
+  --b-row-ink: #ffffff;
+  --b-row-dim: #ced4da;
+  --b-chip-bg: #d41370;
+  --b-chip-fg: #ffffff;
+  --b-btn: #d41370;
+  --b-btn-ink: #ffffff;
+  --b-flap-bg: #101214;
+  --b-flap-fg: #ffffff;
+  --b-flap-edge: #000000;
+  --b-drawer: #ffffff;
+  --b-ink: #101214;
+  --b-dim: #495057;
+  --b-faint: #646c74;
+  --b-panel: #f8f9fa;
+  --b-panel-2: #f1f3f5;
+  --b-rule: #ced4da;
+  --b-track: #f1f3f5;
+  --b-accent: #d41370;
+  --b-note-bg: #fdf3f8;
+  --b-up: #009dc4;
+  --b-down: #d41370;
+  --b-pill-ink: #ffffff;
+  --b-seg-on: #101214;
+  --b-seg-on-ink: #ffffff;
+  --r-bulgaria: #009dc4;
+  --r-romania: #d41370;
+  --r-kosovo: #891b55;
+  --r-serbia: #495057;
+  --r-croatia: #646c74;
+  --t-gov: #212529;
+  --t-press: #009dc4;
+  --t-est: #ced4da;
+  --t-est-fill: #ced4da;
+}
+
+.arrivals .ar-board .ar-flap {
+  background: var(--b-flap-bg);
+  color: var(--b-flap-fg);
+  border-color: var(--b-flap-edge);
+}
+.arrivals .ar-board .ar-flap.is-sep {
+  background: transparent;
+  border-color: transparent;
+}
+
+.arrivals .ar-board .ar-b-row {
+  background: var(--b-row);
+  color: var(--b-row-ink);
+  border-top: 1px solid var(--b-row-rule);
+  transition: background 0.15s ease;
+}
+.arrivals .ar-board .ar-b-row:hover { background: var(--b-row-hover); }
+
+.arrivals .ar-board .ar-drawer {
+  background: var(--b-drawer);
+  color: var(--b-ink);
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.arrivals .ar-board .ar-code {
+  font-family: var(--ar-mono);
+  font-weight: 600;
+  background: var(--b-chip-bg);
+  color: var(--b-chip-fg);
+  border-radius: 6px;
+  padding: 5px 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.arrivals .ar-board .ar-view {
+  font-family: var(--ar-sans);
+  font-weight: 600;
+  font-size: 12px;
+  border: 1.5px solid var(--b-row-dim);
+  color: var(--b-row-ink);
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.arrivals .ar-board [aria-expanded="true"] .ar-view {
+  background: var(--b-btn);
+  border-color: var(--b-btn);
+  color: var(--b-btn-ink);
+}
+
+.arrivals .ar-board .ar-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--ar-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--b-pill-ink);
+}
+.arrivals .ar-board .ar-trend.up { background: var(--b-up); }
+.arrivals .ar-board .ar-trend.down { background: var(--b-down); }
+
+.arrivals .ar-board .ar-seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--b-panel-2);
+}
+.arrivals .ar-board .ar-seg button {
+  font-family: var(--ar-sans);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--b-dim);
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: transparent;
+}
+.arrivals .ar-board .ar-seg button[aria-selected="true"] {
+  background: var(--b-seg-on);
+  color: var(--b-seg-on-ink);
+}
+
+.arrivals .ar-board .ar-bar-row {
+  display: grid;
+  grid-template-columns: 158px 1fr 92px;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 8px 6px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--b-ink);
+}
+.arrivals .ar-board .ar-bar-row:hover,
+.arrivals .ar-board .ar-bar-row[aria-pressed="true"] {
+  background: var(--b-panel);
+}
+@media (max-width: 600px) {
+  .arrivals .ar-board .ar-bar-row { grid-template-columns: 112px 1fr 72px; }
+}
+.arrivals .ar-board .ar-bar-track {
+  height: 10px;
+  background: var(--b-track);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.arrivals .ar-board .ar-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  transform-origin: left center;
+  animation: ar-grow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.arrivals .ar-board .ar-tier {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1.5px solid var(--b-faint);
+  flex: none;
+}
+.arrivals .ar-board .ar-tier.gov { background: var(--t-gov); border-color: var(--t-gov); }
+.arrivals .ar-board .ar-tier.press { background: var(--t-press); border-color: var(--t-press); }
+.arrivals .ar-board .ar-tier.est { background: var(--t-est-fill); border-color: var(--t-est); }
+
+.arrivals .ar-board .ar-card {
+  background: var(--b-panel);
+  border-radius: 10px;
+}
+.arrivals .ar-board .ar-note {
+  background: var(--b-note-bg);
+  border-radius: 10px;
+}
+
+/* ---------- reality ladder / audit ---------- */
+.arrivals .ar-status-open { color: var(--ar-open); }
+.arrivals .ar-status-partial { color: var(--ar-partial); }
+.arrivals .ar-status-closed { color: var(--ar-closed); }
+.arrivals .ar-dot-open { background: var(--ar-open); }
+.arrivals .ar-dot-partial { background: var(--ar-partial); }
+.arrivals .ar-dot-closed { background: var(--ar-closed); }

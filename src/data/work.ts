@@ -24,6 +24,13 @@ export const projects: Project[] = [
     hoverNote: "see the research →",
   },
   {
+    slug: "arrivals",
+    title: "Arrivals Board",
+    image: "/images/work-arrivals.png",
+    imageAlt: "The Arrivals Board under the headline Numbers with receipts, showing Romanian and Kosovar population counts, trend and sources",
+    hoverNote: "flip the board →",
+  },
+  {
     slug: "cinefatic",
     title: "Cinefatic",
     image: "/images/work-cinefatic.png",
