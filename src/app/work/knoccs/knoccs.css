@@ -1,0 +1,108 @@
+/* KNOCCS case study — scoped design tokens.
+   Values are the real tokens from the Figma file's "Colors" panel
+   (Design System V1.1, node 148:294) — not invented for the page.
+   Not part of the site design system — everything is namespaced under `.knoccs`.
+   Headline + body face is Plus Jakarta Sans (--font-knoccs-sans, loaded in
+   layout.tsx) — a rounded geometric sans standing in for the system's real
+   "Yellix" typeface, which isn't published as a web font.
+   Eyebrows/labels reuse JetBrains Mono (--font-cabinblu-mono), same as the
+   other case studies. */
+
+.knoccs {
+  /* Page chrome (editorial wrapper, not the product's own UI) */
+  --kn-bg: #f7f6f3;
+  --kn-card: #ffffff;
+  --kn-ink: #1a181c; /* = Secondary/S1 */
+  --kn-body: #534e56; /* = Secondary/S3 */
+  --kn-muted: #7d7881; /* = Secondary/S4 */
+  --kn-border: rgba(26, 24, 28, 0.12);
+
+  /* The product's own dark surface, reused verbatim for every live
+     component preview so the Playground/Evolution stages read as the
+     real product, not a redraw of it. */
+  --kn-stage: #17112a;
+  --kn-stage-card: #ffffff;
+
+  /* Real tokens, from the Figma "Colors" panel */
+  --kn-p1: #778afa;
+  --kn-p2: #7620ba; /* Primary/P2 — the one accent this page borrows */
+  --kn-p3: #eb7878;
+  --kn-p4: #de62ea;
+
+  --kn-s1: #1a181c;
+  --kn-s2: #312d34;
+  --kn-s3: #534e56;
+  --kn-s4: #7d7881;
+  --kn-s5: #ada7b2;
+  --kn-s6: #eae7eb;
+  --kn-s7: #ffffff;
+
+  --kn-red: #b52121;
+  --kn-red-base: #ffeded;
+  --kn-green: #066627;
+  --kn-green-base: #edfff3;
+  --kn-orange: #a74b09;
+  --kn-orange-base: #fff6ed;
+  --kn-blue: #0c2ea8;
+  --kn-blue-base: #e8eaff;
+
+  --kn-hover-dark: #4b3b56;
+  --kn-hover-light: #f7f5fa;
+  --kn-focused: #ede9f9;
+  --kn-star: #ebc606;
+  --kn-menu-bg: #322a38;
+
+  --kn-sans: var(--font-knoccs-sans), "Plus Jakarta Sans", var(--font-inter), sans-serif;
+  --kn-mono: var(--font-cabinblu-mono), "JetBrains Mono", ui-monospace, monospace;
+
+  background: var(--kn-bg);
+  color: var(--kn-body);
+  font-family: var(--kn-sans);
+  scroll-behavior: smooth;
+}
+
+.knoccs h1,
+.knoccs h2,
+.knoccs h3,
+.knoccs h4 {
+  font-family: var(--kn-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kn-ink);
+}
+
+.knoccs .kn-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--kn-mono);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12.5px;
+  color: var(--kn-p2);
+}
+
+.knoccs .kn-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--kn-p2);
+}
+
+.knoccs .kn-panel {
+  background: var(--kn-card);
+  border: 1px solid var(--kn-border);
+  border-radius: 20px;
+}
+
+.knoccs .kn-stage {
+  background: var(--kn-stage);
+  border-radius: 16px;
+}
+
+.knoccs .kn-swatch {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}

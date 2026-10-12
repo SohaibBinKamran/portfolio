@@ -3,6 +3,12 @@
 // CabinBlu -> Cinefatic -> ClassQuest -> WanderLens -> OpenSeat -> Xoopah.
 // KNOCCS was dropped from the index in the redesign; ClassQuest was added.
 // Cover art is the per-project collage exported from the same Figma frame.
+//
+// KNOCCS re-added (not templated on the redesign frame) as "KNOCCS - Design
+// System" — a distinct case study from the original dropped project, covering
+// the design system itself rather than the product screens. Placed right
+// after CabinBlu per explicit user direction; the Arrivals Board was later
+// placed 2nd, also after CabinBlu, which moved KNOCCS to 3rd.
 
 export type Project = {
   slug: string;
@@ -29,6 +35,13 @@ export const projects: Project[] = [
     image: "/images/work-arrivals.png",
     imageAlt: "The Arrivals Board under the headline Numbers with receipts, showing Romanian and Kosovar population counts, trend and sources",
     hoverNote: "flip the board →",
+  },
+  {
+    slug: "knoccs",
+    title: "KNOCCS Design System",
+    image: "/images/work-knoccs.png",
+    imageAlt: "KNOCCS support inbox interface built from its design system's tags, cards and sidebar components",
+    hoverNote: "play with the system →",
   },
   {
     slug: "cinefatic",

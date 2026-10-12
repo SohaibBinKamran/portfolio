@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Caveat, Gloria_Hallelujah, Instrument_Serif, Inter, JetBrains_Mono, Manrope, Mulish } from "next/font/google";
+import { Bebas_Neue, Caveat, Gloria_Hallelujah, Instrument_Serif, Inter, JetBrains_Mono, Manrope, Mulish, Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
@@ -65,6 +65,14 @@ const manrope = Manrope({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+// KNOCCS case study only — stands in for the system's real "Yellix" typeface,
+// which isn't published as a web font.
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-knoccs-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-cabinblu-mono",
   subsets: ["latin"],
@@ -85,7 +93,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${inter.variable} ${gloriaHallelujah.variable} ${circularStd.variable} ${mulish.variable} ${bebasNeue.variable} ${caveat.variable} ${manrope.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      className={`${instrumentSerif.variable} ${inter.variable} ${gloriaHallelujah.variable} ${circularStd.variable} ${mulish.variable} ${bebasNeue.variable} ${caveat.variable} ${manrope.variable} ${plusJakartaSans.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <head>
         <link
