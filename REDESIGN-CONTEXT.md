@@ -85,7 +85,9 @@ Colours: read solid `fill="#…"` / `stop-color` from the SVG, or `get_variable_
 | Contact | `/contact` | **Built ✅ (Aug 2026)** — matched to Figma `node 968-1662` + `Redesign July/GetInTouch.svg`. See §22. |
 | Xoopah case study | `/work/xoopah` | **Built ✅ (Sep 2026)** — matched to Figma `node 1050-16034`. See §24. |
 | Travel & Photography | `/travel-photography` | **Built ✅ (Sep 2026)** — not from Figma, built from scratch across a long iterative session with the user. 63 real photos, an "Aerial Mode" WebGL globe of everywhere visited. See §25. |
-| Other case studies | `/work/[slug]` | **Not built** — no generic template exists. The redesigned `/work` index links CabinBlu, Cinefatic, ClassQuest, WanderLens, OpenSeat, Xoopah — all six now resolve. |
+| Arrivals Board case study | `/work/arrivals` | **Built ✅ (Oct 2026)** — not from Figma; built from the Arrivals Board Artifact work (V1 to V3). 2nd `/work` card. See §28. |
+| KNOCCS Design System case study | `/work/knoccs` | **Built ✅ (Sep/Oct 2026)** — Figma "Design System Hands Off" (`aWu9pZsFYoAhGVfcyeFXH1`), V1.0 node `7:282`, V1.1 node `148:294`. 3rd `/work` card. See §27. |
+| Other case studies | `/work/[slug]` | **Not built** — no generic template exists. The redesigned `/work` index links CabinBlu, Cinefatic, ClassQuest, WanderLens, OpenSeat, Xoopah — all eight cards (incl. Arrivals and KNOCCS, see §27/§28) now resolve. |
 
 **When building a new page, reuse the shared primitives the Home redesign established (§6) and the verified tokens (§5) — don't reinvent them.**
 
@@ -230,6 +232,11 @@ Known correction: Eurowings Digital started **May 2024** (content file), not May
    **RESOLVED for `/work` index (Aug 2026):** the Figma redesign (`node 912-5204`) fixes the
    order at **CabinBlu → Cinefatic → ClassQuest → WanderLens → OpenSeat → Xoopah**. KNOCCS is
    dropped from the index; ClassQuest is added. `work.ts` was rewritten to this list.
+   **UPDATED (Oct 2026):** two cards were inserted after CabinBlu. Current `work.ts` order is
+   **CabinBlu → Arrivals Board → KNOCCS Design System → Cinefatic → ClassQuest → WanderLens →
+   OpenSeat → Xoopah**. The KNOCCS card is a *new* case study about the design system itself
+   (§27), not the old dropped KNOCCS product project. Home "Selected Work" is unchanged
+   (CabinBlu → ClassQuest → Cinefatic).
 2. ~~**Contact form submission**~~ **RESOLVED (Aug 2026):** `ContactForm` POSTs `FormData`
    straight to **Web3Forms** (`https://api.web3forms.com/submit`), which emails the entry to
    Sohaib's inbox — no mail client, no backend. Needs `NEXT_PUBLIC_WEB3FORMS_KEY` in
@@ -515,6 +522,8 @@ Built from Figma `MXxffOc1fNdTbvUBfEVA1z` node `912-5204` (Portfolio/WorkDisplay
 `Redesign July/WorkDisplay.svg`. Page is header + gallery; `page.tsx` composes
 `WorkHeader` / `WorkGallery`. (Originally also mounted a page-level `WorkCursor` — since
 promoted site-wide to `ui/SiteCursor` in `layout.tsx`; see §20.)
+
+> **Superseded (Oct 2026):** Arrivals and KNOCCS cards were added after CabinBlu, see §8.1, §27, §28.
 
 **Data** (`data/work.ts`) — rewritten. Lineup + fixed order: **CabinBlu → Cinefatic →
 ClassQuest → WanderLens → OpenSeat → Xoopah** (KNOCCS dropped, ClassQuest added — §8.1).
@@ -1468,3 +1477,105 @@ two rounds, both screenshotted live on the user's device:
 - Verified at 375×812: pill sits with a real ~24px gutter off each edge instead of flush
   against it, wraps its two-line copy centred, pause button stays a fixed circle. Desktop
   (both rounds) re-screenshotted unchanged — same absolute corners, same single-line pill.
+
+---
+
+## 27. KNOCCS Design System case study (Sep/Oct 2026)
+
+`/work/knoccs`, shipped live 2026-10-12 (commit `d48cf73`). Built from Figma "Design System Hands
+Off" (`aWu9pZsFYoAhGVfcyeFXH1`), V1.0 node `7:282`, V1.1 node `148:294`, cover `46:2810`.
+
+**This is not the old dropped KNOCCS project.** It is about the *design system itself* (KNOCCS is
+the customer support inbox Sohaib designed it for at Spursol). Narrative: V1.0 was screen by
+screen (5 ad hoc button styles for one "Call to Action", duplicated light/dark screens), V1.1 is a
+token driven library (Primary/Secondary/Accent/Hover tokens, a type scale, 20+ documented
+components). Card title on `/work`: "KNOCCS Design System", 3rd card (Arrivals took the 2nd slot).
+
+**Files.** Bespoke, same pattern as Xoopah/OpenSeat/ClassQuest/Cinefatic. Route
+`src/app/work/knoccs/{page.tsx,knoccs.css}` (tokens scoped under `.knoccs`), components in
+`src/components/knoccs/` (`Hero, Overview, Brand, Foundations, Anatomy, Library, Playground,
+Evolution, ClosingCta`), copy and every token hex in `src/data/knoccs.ts`. New font: **Plus Jakarta
+Sans** (`--font-knoccs-sans`, `layout.tsx`) standing in for the system's real "Yellix", which has
+no web font. This is an assumption, not verified with the user.
+
+**Structure.** Hero → Overview (three "5 to 1" numeral tiles) → Brand (real logo mark from node
+`46:2816` plus 3 principles inferred from evidence in the file: one accent vs 7 neutrals, every
+state documented, governance over decoration; no invented brand voice) → Foundations (incl. 15
+real icon SVGs) → Anatomy (annotated Conversation Card, 7 numbered token callouts) → Library →
+Playground → Evolution ("Process", smaller) → ClosingCta.
+
+**Playground** has 7 tabs: Button (Assign states + Loop in avatar stacking), Input (real header
+search field; focus uses the documented Focused token `#EDE9F9`), Tag, Checkbox, Conversation Card,
+Nav Item (Default/Hover/Activated), Tooltip (4 directions). All values came from live
+`get_design_context` calls.
+
+**Lessons and decisions.**
+- First pass (2 sections only: 3 tab Playground + Evolution toggle) was rejected: no inputs,
+  buttons, logo, personality or principles. Do not let an early mockup's scope become the page's
+  scope; a design system study must cover the system.
+- Images: `get_screenshot` never upscales, so 1x PNGs looked soft. Fix: `download_assets` with
+  `defaultFormat: "svg"` and curl the URL. `use_figma` `exportAsync` SVG truncates around 20KB.
+  All `public/images/knoccs/library/*.svg` are vector (dashed `#9747FF` component set outline
+  stripped). Wide frames carry `wide: true` (`lg:col-span-2`). Menu templates are 8 separate
+  `menu-*.svg`. Library uses CSS `columns-*` masonry with `break-inside-avoid` cards.
+- All dashes and hyphenated words removed from rendered copy (regex over `main.innerText`, 0 hits),
+  per the no dashes rule. Figma token names respelled ("Extra small", "S7 White", "Loop in").
+- `/work` cover is a designed collage `public/images/work-knoccs.png` (2400x1437, also the og
+  image): flat vertical gradient `linear-gradient(180deg,#7E52C3,#B586FF)` sampled from the Xoopah
+  cover, 3 column flex grid. Built from a scratch HTML page rendered with headless Edge at 2x, then
+  resized with sharp; the source HTML is not in the repo. Build collages on a grid, not absolute
+  coordinates. The in page hero is still the old `product-hero.jpg`, awaiting a fresh export.
+- Env quirks: `computer.screenshot` is flaky after navigation, so interactivity was verified via
+  `javascript_tool` and `get_page_text`. A second `next dev` on port 3000 blocks `preview_start`.
+
+**Open:** no mobile/tablet pass; hero image refresh.
+
+---
+
+## 28. Arrivals Board case study (Oct 2026)
+
+`/work/arrivals`, live 2026-10-11 (commit `34375d4`), **2nd** `/work` card right after CabinBlu at
+the user's request. **Not from Figma**: built from the Arrivals Board Artifact work (V1 bubble map
+→ V2 official source board → V3 brand skin). Full project record lives in `S:\VFR EWD`; read it
+before any VFR work.
+
+**Files.** `src/app/work/arrivals/{page.tsx,arrivals.css}` (tokens scoped under `.arrivals`),
+`src/components/arrivals/` (`Hero, HeroBoard, Flap, Brief, Reality, Audit, Board, Evolution,
+Decisions, Reflections, ClosingCta, utils.ts`), data in `src/data/arrivals.ts`. No new fonts:
+Circular Std (`--font-cabinblu-sans`) plus JetBrains Mono. Dark departures board palette (amber
+`#f0a83b` on `#12100e`). Page wrapper uses `-mt-14` and hero `pt-[150px]` to hide the nav strip,
+like Cinefatic/CabinBlu. `cta-glow.png` is a copy of KNOCCS's.
+
+**Structure.** Hero (live flap board) → Brief → Reality (4 rung geography ladder, tabs) → Audit
+(7 claims, filter plus accordion, drawn from the real Gemini/V1 review) → Board (playable;
+"Departures board" vs "Brand skin" toggle) → Evolution → Decisions → Reflections (plus sources
+`<details>`) → ClosingCta.
+
+**Data is real**: Destatis AZR, IT.NRW, Statistisches Landesamt BW, Stadt Duisburg 2013. EST tier
+rows are compiler relays with unconfirmed vintage.
+
+**Assumptions the user has not confirmed:** `meta.role` "Researcher & Product Designer",
+`meta.context` "Internal route marketing tool", `meta.timeline` "V1 → V3 · 2026". The organisation
+and manager are deliberately unnamed. No outcome metrics are claimed (none were provided). Brand
+skin swatches show the org's palette hex values (e.g. magenta `D41370`); the user may want them
+dropped if that palette should not be public.
+
+**Cover:** the "Numbers with receipts." cream thumbnail `public/images/work-arrivals.png` (the
+original hand generated `work-arrivals.svg` is superseded).
+
+**Verified in dev:** tsc + eslint clean, no console errors, tabs/filter/expand/city level/skin
+toggle work, no horizontal overflow at 375px. **Not done:** desktop screenshot review of hero and
+audit, tablet pass.
+
+---
+
+## 29. Small site wide changes since §26 (Sep/Oct 2026)
+
+- **Org logos** added to the About timeline and the Home strip; Aerial Mode mobile layout fixed
+  (commit `51acf5f`).
+- **About bio** now says "4+ years of experience" (see §13).
+- **CabinBlu PIN gate removed** (commit `9438024`), see the note at §18.
+- **Deploys are manual only** (`gh workflow run deploy.yml`), see §23. Pushing to `main` alone
+  does not publish.
+- **Uncommitted at time of writing:** `src/data/home.ts` changes the Zain Khatri testimonial role
+  from "Sr. Product Designer | Leasepoint" to "Sr. Product Designer | Spur Solutions".
