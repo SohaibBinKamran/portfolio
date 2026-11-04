@@ -7,7 +7,7 @@
 export const hero = {
   headlineMuted: "Crafting Real Impact,",
   headlineStrong: "through Human-First Design",
-  status: "currently crafting at Eurowings Digital",
+  status: "currently open to product design roles",
   location: "Siegen, Germany",
   role: "UX/Product Designer",
   annotation: "Perhaps you?",
@@ -43,7 +43,7 @@ export const testimonials = [
     quote:
       "He joined as a UX trainee and quickly stood out, especially in heuristics. He ramps fast, from interviews to sketches to high-fi. Always user-first, adapts on the fly, never pressures seniors, and brings energy to a serious team.",
     name: "Zain Khatri",
-    role: "Sr. Product Designer | Leasepoint",
+    role: "Sr. Product Designer | Spur Solutions",
     avatar: "/images/testimonial-zain.png",
   },
   {
