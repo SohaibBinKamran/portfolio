@@ -248,7 +248,7 @@ Known correction: Eurowings Digital started **May 2024** (content file), not May
    folder, scoped `work/<name>/<name>.css` token block, and `data/<name>.ts` — mirroring
    CabinBlu, which was itself aligned to the fresh design in §18.
 4. **Responsive** — Figma frames are desktop. Get mobile/tablet frames, or agree on breakpoint behavior before building. **`NavBar` is the one exception, fixed Sep 2026 (§26)** — every other page's mobile/tablet pass is still open.
-5. Content file's own open items: ~~MSc end date~~ (**About redesign uses `Oct 2023 - Apr 2026` per Figma `node 920-7843`**), KNOCCS/Xoopah metric wording, Spur product count, Behance/LinkedIn URL confirmation.
+5. Content file's own open items: ~~MSc end date~~ (**About now uses `Oct 2023 - Sept 2026`, user-corrected Nov 2026; Figma's `Apr 2026` is stale**), KNOCCS/Xoopah metric wording, Spur product count, Behance/LinkedIn URL confirmation.
 6. **Eurowings start date on About** — Figma says `May 2025`, `about.ts` keeps **`May 2024`** (content-file + user override, §7). Figma text is stale here.
 
 ---
@@ -461,8 +461,8 @@ not the stale Aug 2 version §3 warned about — check mtime. `get_variable_defs
 nothing (no published vars). Page is 3 sections; `page.tsx` unchanged (still composes
 `AboutHero` / `AboutBio` / `AboutFeatures`).
 
-**Data** (`data/about.ts`) — added `education[]` (Universität Siegen HCI Masters
-`Oct 2023 - Apr 2026`; IBA CS Bachelors `Aug 2018 - June 2022`), `TimelineEntry` type,
+**Data** (`data/about.ts`) — added `education[]` (University of Siegen HCI Masters
+`Oct 2023 - Sept 2026`; IBA CS Bachelors `Aug 2018 - June 2022`), `TimelineEntry` type,
 per-feature `emphasis` keyword (bolded inline in the bento bodies), `bio.whoHeading`.
 Eurowings kept at **May 2024** (Figma's `May 2025` is stale — §7, §8.6). Feature titles
 already matched the design.
@@ -478,6 +478,10 @@ already matched the design.
   `object-contain`) to the left of the title — **tried removing the badge for a bare
   larger icon, user preferred the badge, reverted.**
 - `bio.bioText` — "over 3 years of experience" → **"4+ years of experience"**.
+- Nov 2026 corrections: Eurowings Digital dates → `May 2024 - Sept 2026` (job ended, no
+  longer "Present"); Siegen → **"University of Siegen"** (was "Universität Siegen"), end
+  date `Apr 2026` → `Sept 2026`. Note Home `hero.status` ("currently crafting at Eurowings
+  Digital", `data/home.ts`) was left as-is and may now be stale.
 
 **AboutHero** (`components/about/AboutHero.tsx`)
 - Background is the **pre-baked** `about-hero-bg.png` (grayscale sky, centre-out white fade

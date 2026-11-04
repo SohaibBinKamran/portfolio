@@ -36,7 +36,7 @@ export const experiences: TimelineEntry[] = [
   {
     title: "Eurowings Digital",
     subtitle: "Working Student, Digital Product & Communication Management",
-    dates: "May 2024 - Present",
+    dates: "May 2024 - Sept 2026",
     logo: "/images/logos/eurowings-digital.svg",
   },
   {
@@ -56,8 +56,8 @@ export const experiences: TimelineEntry[] = [
 export const education: TimelineEntry[] = [
   {
     title: "Masters in Human Computer Interaction (HCI)",
-    subtitle: "Universität Siegen",
-    dates: "Oct 2023 - Apr 2026",
+    subtitle: "University of Siegen",
+    dates: "Oct 2023 - Sept 2026",
     logo: "/images/logos/uni-siegen.svg",
   },
   {
