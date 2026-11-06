@@ -7,6 +7,8 @@ import { Foundations } from "@/components/knoccs/Foundations";
 import { Anatomy } from "@/components/knoccs/Anatomy";
 import { Playground } from "@/components/knoccs/Playground";
 import { Library } from "@/components/knoccs/Library";
+import { FigmaToCode } from "@/components/knoccs/FigmaToCode";
+import { BuildNote } from "@/components/knoccs/BuildNote";
 import { Evolution } from "@/components/knoccs/Evolution";
 import { ClosingCta } from "@/components/knoccs/ClosingCta";
 
@@ -30,8 +32,10 @@ export default function KnoccsPage() {
       <Foundations />
       <Anatomy />
       <Playground />
+      <FigmaToCode />
       <Library />
       <Evolution />
+      <BuildNote />
       <ClosingCta />
     </div>
   );

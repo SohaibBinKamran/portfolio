@@ -518,6 +518,75 @@ export const reflections = {
     "Figures are citizenship counts from the Ausländerzentralregister, not ethnicity. Naturalised citizens aren't captured, so every total understates the real diaspora.",
 };
 
+// Build note: how the board was made with AI, what stayed human, how it shipped.
+// Prompts are paraphrased steering instructions, not verbatim transcripts.
+// House rule: no dashes or hyphenated words in copy.
+export const buildNote = {
+  eyebrow: "BUILD NOTE",
+  heading: "How I built it with AI",
+  intro:
+    "Claude did the typing. The decisions about what the board may claim were mine.",
+  stack: [
+    "Claude Artifacts for V0 to V3",
+    "Claude Code",
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS 4",
+    "Framer Motion",
+    "Typed data file",
+    "GitHub Actions",
+  ],
+  prompts: {
+    heading: "Steering prompts",
+    items: [
+      {
+        version: "V0",
+        text: "Draw a heat map of where each community lives in Germany.",
+        result: "Rejected. It looked precise and implied data that does not exist.",
+      },
+      {
+        version: "V1",
+        text: "Make it a split flap departures board. Click a route to open ranked bars.",
+        result: "Kept. The metaphor fit, but some figures leaned on Wikipedia.",
+      },
+      {
+        version: "V2",
+        text: "Rebuild on official sources only. Tier every number as GOV, PRESS or EST.",
+        result: "Wikipedia removed. Each bar now says where it came from.",
+      },
+      {
+        version: "V3",
+        text: "Apply the brand palette. Separate source tiers by shape, not by colour.",
+        result: "Shipped as the Brand skin toggle.",
+      },
+    ],
+  },
+  byHand: {
+    heading: "What I changed by hand",
+    items: [
+      "Checked all 7 AI claims against Destatis, IT.NRW and the state offices myself",
+      "Corrected my own draft: Romanians in Baden-Württemberg were 181,430, not 81,000",
+      "Deleted claims with no source, like the Düsseldorf share and the Cologne districts",
+      "Wrote every “what's missing” caveat, because AI smoothed them away",
+      "Chose to leave Croatia with no city rows instead of filling the gap",
+    ],
+  },
+  production: {
+    heading: "How it got to production",
+    steps: [
+      "Prototyped four versions as Claude Artifacts and reworked each on feedback",
+      "Ported V3 into this portfolio as typed data plus React components",
+      "Audited every figure against its source link before merging",
+      "Pushed to main, ran the deploy workflow and verified the live page",
+    ],
+  },
+  outcome: {
+    label: "Shipped",
+    body: "At Eurowings Digital the board went live and the marketing team used it to align their campaigns for VFR travel.",
+  },
+};
+
 export const closingCta = {
   heading: "Got a question the data can't answer yet? Let's design around it.",
   cta: "Let's Talk?",

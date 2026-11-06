@@ -9,6 +9,7 @@ import { FlightRecorder } from "@/components/cabinblu/FlightRecorder";
 import { Journey } from "@/components/cabinblu/Journey";
 import { BaggageClaim } from "@/components/cabinblu/BaggageClaim";
 import { Arrivals } from "@/components/cabinblu/Arrivals";
+import { Impact } from "@/components/cabinblu/Impact";
 import { Postcards } from "@/components/cabinblu/Postcards";
 import { CaseStudyFooter } from "@/components/cabinblu/CaseStudyFooter";
 import { ClosingCta } from "@/components/cabinblu/ClosingCta";
@@ -37,6 +38,7 @@ export default function CabinBluPage() {
       <Journey />
       <BaggageClaim />
       <Arrivals />
+      <Impact />
       <Postcards />
       <CaseStudyFooter />
       <ClosingCta />

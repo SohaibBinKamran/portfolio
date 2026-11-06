@@ -7,6 +7,7 @@ import { Audit } from "@/components/arrivals/Audit";
 import { Board } from "@/components/arrivals/Board";
 import { Evolution } from "@/components/arrivals/Evolution";
 import { Decisions } from "@/components/arrivals/Decisions";
+import { BuildNote } from "@/components/arrivals/BuildNote";
 import { Reflections } from "@/components/arrivals/Reflections";
 import { ClosingCta } from "@/components/arrivals/ClosingCta";
 
@@ -32,6 +33,7 @@ export default function ArrivalsPage() {
       <Board />
       <Evolution />
       <Decisions />
+      <BuildNote />
       <Reflections />
       <ClosingCta />
     </div>

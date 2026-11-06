@@ -27,14 +27,14 @@ function ClockIcon({ color }: { color: string }) {
 function CheckIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M3 8.5L6.2 11.5L13 4.5" stroke="#7620BA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 8.5L6.2 11.5L13 4.5" stroke="var(--kn-p2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 function StarIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="#EBC606" aria-hidden>
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="var(--kn-star)" aria-hidden>
       <path d="M8 1.3l1.98 4.2 4.62.55-3.4 3.2.9 4.56L8 11.6l-4.1 2.2.9-4.56-3.4-3.2 4.62-.55L8 1.3z" />
     </svg>
   );
@@ -43,8 +43,8 @@ function StarIcon() {
 function SearchIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="7" cy="7" r="4.75" stroke="#ADA7B2" strokeWidth="1.4" />
-      <path d="M13 13l-2.5-2.5" stroke="#ADA7B2" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="7" cy="7" r="4.75" stroke="var(--kn-s5)" strokeWidth="1.4" />
+      <path d="M13 13l-2.5-2.5" stroke="var(--kn-s5)" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
@@ -52,18 +52,18 @@ function SearchIcon() {
 function ChevronDown() {
   return (
     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M4 6l4 4 4-4" stroke="#1A181C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 6l4 4 4-4" stroke="var(--kn-s1)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-const AVATAR_COLORS: Record<string, string> = { H: "#778AFA", S: "#EB7878", O: "#DE62EA" };
+const AVATAR_COLORS: Record<string, string> = { H: "var(--kn-p1)", S: "var(--kn-p3)", O: "var(--kn-p4)" };
 
 function Avatar({ letter }: { letter: string }) {
   return (
     <span
       className="flex size-[24px] shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
-      style={{ background: AVATAR_COLORS[letter] ?? "#778AFA" }}
+      style={{ background: AVATAR_COLORS[letter] ?? "var(--kn-p1)" }}
     >
       {letter}
     </span>
@@ -125,17 +125,17 @@ export function Playground() {
                 <div className="flex flex-col items-center gap-8">
                   <div className="flex items-center gap-3">
                     {assignState === "Assign to me" && (
-                      <span className="rounded-[8px] border border-[#1A181C] bg-white px-4 py-2.5 text-[13px] font-medium text-[#1A181C]">
+                      <span className="rounded-[8px] border border-[color:var(--kn-s1)] bg-white px-4 py-2.5 text-[13px] font-medium text-[color:var(--kn-s1)]">
                         Assign to me
                       </span>
                     )}
                     {assignState === "Assign" && (
-                      <span className="inline-flex items-center gap-1.5 rounded-[8px] border border-[#1A181C] bg-white px-4 py-2.5 text-[13px] font-medium text-[#1A181C]">
+                      <span className="inline-flex items-center gap-1.5 rounded-[8px] border border-[color:var(--kn-s1)] bg-white px-4 py-2.5 text-[13px] font-medium text-[color:var(--kn-s1)]">
                         Assign <ChevronDown />
                       </span>
                     )}
                     {assignState === "Assigned" && (
-                      <span className="inline-flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-[13px] font-medium text-[#1A181C]">
+                      <span className="inline-flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-[13px] font-medium text-[color:var(--kn-s1)]">
                         <Avatar letter="H" /> Harry
                       </span>
                     )}
@@ -156,7 +156,7 @@ export function Playground() {
                             </span>
                           ))}
                           {loopState === "3+" && (
-                            <span className="-ml-1.5 flex size-[24px] items-center justify-center rounded-full bg-[#EAE7EB] text-[9px] font-semibold text-[#7D7881]">
+                            <span className="-ml-1.5 flex size-[24px] items-center justify-center rounded-full bg-[color:var(--kn-s6)] text-[9px] font-semibold text-[color:var(--kn-s4)]">
                               +1
                             </span>
                           )}
@@ -172,8 +172,8 @@ export function Playground() {
                   <div
                     className="flex h-[40px] items-center gap-2 rounded-[8px] px-3 transition-shadow"
                     style={{
-                      background: inputFocused ? "#EDE9F9" : "#F5F4FC",
-                      boxShadow: inputFocused ? "0 0 0 2px #7620BA" : "none",
+                      background: inputFocused ? "var(--kn-focused)" : "#F5F4FC",
+                      boxShadow: inputFocused ? "0 0 0 2px var(--kn-p2)" : "none",
                     }}
                   >
                     <SearchIcon />
@@ -181,9 +181,9 @@ export function Playground() {
                       onFocus={() => setInputFocused(true)}
                       onBlur={() => setInputFocused(false)}
                       placeholder="Search for conversation and more..."
-                      className="flex-1 bg-transparent text-[14px] text-[#312D34] placeholder:text-[#ADA7B2] focus:outline-none"
+                      className="flex-1 bg-transparent text-[14px] text-[color:var(--kn-s2)] placeholder:text-[color:var(--kn-s5)] focus:outline-none"
                     />
-                    <span className="shrink-0 text-[12px] text-[#ADA7B2]">Ctrl + K</span>
+                    <span className="shrink-0 text-[12px] text-[color:var(--kn-s5)]">Ctrl + K</span>
                   </div>
                 </div>
               )}
@@ -203,7 +203,7 @@ export function Playground() {
                   aria-pressed={checkboxOn}
                   onClick={() => setCheckboxOn((v) => !v)}
                   className="flex size-[22px] items-center justify-center rounded-[5px] border-[1.6px] bg-white transition-colors"
-                  style={{ borderColor: checkboxOn ? "#7620BA" : "#ADA7B2" }}
+                  style={{ borderColor: checkboxOn ? "var(--kn-p2)" : "var(--kn-s5)" }}
                 >
                   {checkboxOn && <CheckIcon />}
                 </button>
@@ -212,30 +212,30 @@ export function Playground() {
               {tab === "card" && (
                 <div
                   className="w-full max-w-[320px] rounded-[12px] border p-4 transition-colors"
-                  style={{ background: isCardHover ? "#F7F5FA" : "#FFFFFF", borderColor: "#EAE7EB" }}
+                  style={{ background: isCardHover ? "var(--kn-hover-light)" : "var(--kn-s7)", borderColor: "var(--kn-s6)" }}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      {isCardNewIn && <span className="size-[7px] shrink-0 rounded-full bg-[#7620BA]" />}
-                      <span className="text-[14px] text-[#1A181C]" style={{ fontWeight: isCardNewIn ? 700 : 500 }}>
+                      {isCardNewIn && <span className="size-[7px] shrink-0 rounded-full bg-[color:var(--kn-p2)]" />}
+                      <span className="text-[14px] text-[color:var(--kn-s1)]" style={{ fontWeight: isCardNewIn ? 700 : 500 }}>
                         Liam Wilson
                       </span>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                       <StarIcon />
-                      <span className="text-[12px] font-medium text-[#7D7881]">6:34 PM</span>
+                      <span className="text-[12px] font-medium text-[color:var(--kn-s4)]">6:34 PM</span>
                     </div>
                   </div>
-                  <p className="mt-1 truncate text-[13px] text-[#534E56]">Missing Tooltip on Product Images</p>
+                  <p className="mt-1 truncate text-[13px] text-[color:var(--kn-s3)]">Missing Tooltip on Product Images</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full border border-[#7D7881] bg-[#F7F5FA] px-2 py-1 text-[11px] text-[#312D34]">
-                      <ClockIcon color="#312D34" />
+                    <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--kn-s4)] bg-[color:var(--kn-hover-light)] px-2 py-1 text-[11px] text-[color:var(--kn-s2)]">
+                      <ClockIcon color="var(--kn-s2)" />
                       {isCardHover ? "15 mins" : "30 mins"}
                     </span>
-                    <span className="rounded-full border border-[#B52121] bg-[#FFEDED] px-2 py-1 text-[11px] text-[#B52121]">
+                    <span className="rounded-full border border-[color:var(--kn-red)] bg-[color:var(--kn-red-base)] px-2 py-1 text-[11px] text-[color:var(--kn-red)]">
                       Critical
                     </span>
-                    <span className="rounded-full bg-[#EAE7EB] px-2 py-1 text-[11px] text-[#312D34]">+1</span>
+                    <span className="rounded-full bg-[color:var(--kn-s6)] px-2 py-1 text-[11px] text-[color:var(--kn-s2)]">+1</span>
                   </div>
                 </div>
               )}
@@ -247,14 +247,14 @@ export function Playground() {
                       key={label}
                       className="mb-1 flex items-center justify-between rounded-[8px] px-3 py-2 text-[13px] last:mb-0 transition-colors"
                       style={{
-                        background: idx === 1 && navState !== "Default" ? "#4B3B56" : "transparent",
-                        color: idx === 1 && navState === "Activated" ? "#FFFFFF" : "#ADA7B2",
+                        background: idx === 1 && navState !== "Default" ? "var(--kn-hover-dark)" : "transparent",
+                        color: idx === 1 && navState === "Activated" ? "var(--kn-s7)" : "var(--kn-s5)",
                         fontWeight: idx === 1 && navState === "Activated" ? 600 : 400,
                       }}
                     >
                       {label}
                       {idx === 1 && (
-                        <span className="flex size-[18px] items-center justify-center rounded-full bg-[#7620BA] text-[10px] text-white">
+                        <span className="flex size-[18px] items-center justify-center rounded-full bg-[color:var(--kn-p2)] text-[10px] text-white">
                           3
                         </span>
                       )}
@@ -264,9 +264,9 @@ export function Playground() {
               )}
 
               {tab === "tooltip" && (
-                <div className="relative inline-flex items-center gap-3 rounded-[4px] bg-[#312D34] px-3 py-2 text-[14px] font-medium text-white">
+                <div className="relative inline-flex items-center gap-3 rounded-[4px] bg-[color:var(--kn-s2)] px-3 py-2 text-[14px] font-medium text-white">
                   <span
-                    className="absolute size-[8px] rotate-45 bg-[#312D34]"
+                    className="absolute size-[8px] rotate-45 bg-[color:var(--kn-s2)]"
                     style={{
                       top: tooltipDir === "Up" ? "-4px" : tooltipDir === "Down" ? undefined : "10px",
                       bottom: tooltipDir === "Down" ? "-4px" : undefined,
@@ -332,7 +332,7 @@ export function Playground() {
                     onClick={() => setTagId(t.id)}
                     aria-label={t.label}
                     className="size-[26px] rounded-full border-2 transition-shadow"
-                    style={{ background: t.bg, borderColor: t.id === tagId ? "#1A181C" : "transparent" }}
+                    style={{ background: t.bg, borderColor: t.id === tagId ? "var(--kn-s1)" : "transparent" }}
                   />
                 ))}
 

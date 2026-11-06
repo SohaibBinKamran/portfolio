@@ -131,12 +131,12 @@ export const anatomy = {
 };
 
 export const tagVariants = [
-  { id: "black", label: "30 mins", bg: "#F7F5FA", border: "#7D7881", fg: "#312D34", icon: "clock" },
-  { id: "green", label: "Green", bg: "#EDFFF3", border: "#066627", fg: "#066627", icon: "clock" },
-  { id: "blue", label: "Blue", bg: "#E8EAFF", border: "#0C2EA8", fg: "#0C2EA8", icon: "clock" },
-  { id: "orange", label: "Orange", bg: "#FFF6ED", border: "#A74B09", fg: "#A74B09", icon: "clock" },
-  { id: "red", label: "Red", bg: "#FFEDED", border: "#B52121", fg: "#B52121", icon: "clock" },
-  { id: "counter", label: "+5", bg: "#EAE7EB", border: "transparent", fg: "#312D34", icon: null },
+  { id: "black", label: "30 mins", bg: "var(--kn-hover-light)", border: "var(--kn-s4)", fg: "var(--kn-s2)", icon: "clock" },
+  { id: "green", label: "Green", bg: "var(--kn-green-base)", border: "var(--kn-green)", fg: "var(--kn-green)", icon: "clock" },
+  { id: "blue", label: "Blue", bg: "var(--kn-blue-base)", border: "var(--kn-blue)", fg: "var(--kn-blue)", icon: "clock" },
+  { id: "orange", label: "Orange", bg: "var(--kn-orange-base)", border: "var(--kn-orange)", fg: "var(--kn-orange)", icon: "clock" },
+  { id: "red", label: "Red", bg: "var(--kn-red-base)", border: "var(--kn-red)", fg: "var(--kn-red)", icon: "clock" },
+  { id: "counter", label: "+5", bg: "var(--kn-s6)", border: "transparent", fg: "var(--kn-s2)", icon: null },
 ] as const;
 
 export const cardStates = ["Default", "Hover", "New In"] as const;
@@ -378,6 +378,159 @@ export const evolution = {
       },
     },
   ],
+};
+
+// Figma to code map. Node ids are from the Figma file "Design System Hands Off".
+// The coded twins live in components/knoccs/Playground.tsx and read their colors
+// from the --kn-* custom properties in work/knoccs/knoccs.css.
+export const figmaToCode = {
+  eyebrow: "FIGMA TO CODE",
+  heading: "One token, every component",
+  intro:
+    "Each Figma component has a coded twin with the same name, the same states and the same tokens. Change a token once and every twin follows. Try it.",
+  chain: [
+    { label: "Figma variable", value: "Primary / P2" },
+    { label: "CSS token", value: "--kn-p2" },
+    { label: "Coded component", value: "Checkbox, Input, Card, Nav Item" },
+  ],
+  presets: [
+    { id: "original", name: "P2 Original", hex: "#7620BA" },
+    { id: "ocean", name: "Ocean", hex: "#0C2EA8" },
+    { id: "forest", name: "Forest", hex: "#066627" },
+    { id: "ember", name: "Ember", hex: "#A74B09" },
+  ],
+  rows: [
+    {
+      figma: "Assign Button",
+      node: "771:26143",
+      states: "Assign to me, Assign, Assigned",
+      code: "Playground / Button",
+      tokens: ["s1", "s7", "p1"],
+      usesP2: false,
+    },
+    {
+      figma: "Loop in",
+      node: "614:15743",
+      states: "Default, 1, 2, 3, 3+",
+      code: "Playground / Button",
+      tokens: ["p1", "p3", "p4", "s6"],
+      usesP2: false,
+    },
+    {
+      figma: "Search field",
+      node: "535:821",
+      states: "Default, Focused",
+      code: "Playground / Input",
+      tokens: ["focused", "p2", "s5"],
+      usesP2: true,
+    },
+    {
+      figma: "Tag",
+      node: "",
+      states: "Black, Green, Blue, Orange, Red, Counter",
+      code: "Playground / Tag",
+      tokens: ["green", "blue", "orange", "red"],
+      usesP2: false,
+    },
+    {
+      figma: "Checkbox",
+      node: "",
+      states: "On, Off",
+      code: "Playground / Checkbox",
+      tokens: ["p2", "s5"],
+      usesP2: true,
+    },
+    {
+      figma: "Conversation Card",
+      node: "",
+      states: "Default, Hover, New In",
+      code: "Playground / Card",
+      tokens: ["hover-light", "s6", "p2", "s1"],
+      usesP2: true,
+    },
+    {
+      figma: "Nav Item",
+      node: "539:4819",
+      states: "Default, Hover, Activated",
+      code: "Playground / Nav Item",
+      tokens: ["hover-dark", "s5", "s7", "p2"],
+      usesP2: true,
+    },
+    {
+      figma: "Tooltip",
+      node: "1149:17342",
+      states: "Up, Down, Right, Left",
+      code: "Playground / Tooltip",
+      tokens: ["s2"],
+      usesP2: false,
+    },
+  ],
+};
+
+export const buildNote = {
+  eyebrow: "BUILD NOTE",
+  heading: "How I built it with AI",
+  intro:
+    "The system was designed in Figma at Spursol. For this page, Claude Code turned it into working components, and I checked every value against the file.",
+  stack: [
+    "Figma",
+    "Figma MCP",
+    "Claude Code",
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS 4",
+    "CSS custom properties",
+    "GitHub Actions",
+  ],
+  prompts: {
+    heading: "Steering prompts",
+    items: [
+      {
+        version: "01",
+        text: "Read the real hex, size and label from the Figma node. Do not eyeball anything.",
+        result: "Every color, state name and sample string comes from the file.",
+      },
+      {
+        version: "02",
+        text: "Cover the whole system: brand, tokens, inputs, buttons and the full library.",
+        result: "My first version had two cherry picked demos. I rejected it.",
+      },
+      {
+        version: "03",
+        text: "Make it more graphic and less texty.",
+        result: "Numeral tiles, an annotated card and a masonry library replaced paragraphs.",
+      },
+      {
+        version: "04",
+        text: "Components read from tokens, never from raw hex.",
+        result: "The live token demo above only works because of this rule.",
+      },
+    ],
+  },
+  byHand: {
+    heading: "What I changed by hand",
+    items: [
+      "Wrote the three design principles from evidence in the file, not from a generic brand deck",
+      "Chose Plus Jakarta Sans as the web stand in, since Yellix is not published as a web font",
+      "Re-exported the library as vector so it stays sharp at any size",
+      "Respelled token names and cut every dash from the copy",
+      "Picked the cover gradient and spacing myself after three AI options felt off",
+    ],
+  },
+  production: {
+    heading: "How it got to production",
+    steps: [
+      "Designed and documented V1.0 then V1.1 in Figma at Spursol",
+      "Built the page in Next.js with tokens as CSS custom properties",
+      "Ran a full production build before every push",
+      "Pushed to main, ran the deploy workflow and checked the live URLs",
+    ],
+  },
+  outcome: {
+    label: "Shipped",
+    body: "KNOCCS shipped and is live, built on this design system at Spursol.",
+  },
 };
 
 export const closingCta = {

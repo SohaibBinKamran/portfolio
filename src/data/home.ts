@@ -159,6 +159,80 @@ export const process = [
   },
 ];
 
+// "How I work with AI" section. House rule: no dashes or hyphenated words in copy.
+export const aiWorkflow = {
+  label: "AI Workflow",
+  heading: "How I work with AI",
+  intro:
+    "I prototype in code, not just in Figma. AI does the typing. I keep the judgment: what to build, what to cut and what never ships.",
+  primary: [
+    {
+      name: "Claude Code",
+      role: "My main build partner",
+      body: "Builds and refactors real prototypes in the actual repo, from this portfolio to the Arrivals Board and the KNOCCS playground. I brief it with a goal, the design tokens and the rules, then review every diff.",
+    },
+    {
+      name: "Vercel",
+      role: "From prototype to a live URL",
+      body: "Every prototype gets a preview link people can click, so feedback lands on the real thing and not on a screenshot. Production is one reviewed merge away.",
+    },
+  ],
+  supporting: [
+    { name: "Codex", body: "A second opinion on hard refactors and bug hunts." },
+    { name: "ChatGPT", body: "Research drafts, copy options and quick sanity checks." },
+    { name: "Lovable AI", body: "Fast throwaway prototypes to test an idea with users." },
+    { name: "Cursor", body: "Inline edits when I want to stay close to the code." },
+  ],
+  loop: [
+    "Frame the problem and the success check first",
+    "Prompt against real tokens and components",
+    "Review the diff, then fix what feels off by hand",
+    "Test on a live preview, then ship through review",
+  ],
+};
+
+export const aiGuardrails = {
+  label: "AI Guardrails",
+  heading: "Where AI stops",
+  intro: "Rules I set before the first prompt, so speed never costs trust.",
+  columns: [
+    {
+      tone: "may" as const,
+      title: "AI may",
+      items: [
+        "Draft layouts, components and first pass copy",
+        "Refactor code against tokens I defined",
+        "Summarize research and propose patterns to test",
+        "Flag accessibility and consistency issues for me to check",
+      ],
+    },
+    {
+      tone: "never" as const,
+      title: "AI must never",
+      items: [
+        "Edit anything silently, every change is a visible diff",
+        "State a fact, number or quote without a source",
+        "Invent colors, spacing or components outside the system",
+        "Ship without a human review of the result",
+      ],
+    },
+    {
+      tone: "show" as const,
+      title: "How the UI shows confidence",
+      items: [
+        "Every figure carries a source tier, so official numbers look different from estimates",
+        "Missing data says what is missing instead of guessing",
+        "AI answers sit next to their citation, with Explain and Cite one tap away",
+        "Anything AI drafted waits for a person to confirm it",
+      ],
+    },
+  ],
+  proof: [
+    { project: "Arrivals Board", note: "Of 7 AI research claims, only 2 held up as stated.", href: "/work/arrivals" },
+    { project: "ClassQuest", note: "AI extracts, students confirm. Nothing is saved silently.", href: "/work/classquest" },
+  ],
+};
+
 export const closingCta = {
   heading: "Ready to create an exceptional digital experience?",
   cta: "Let's Talk?",

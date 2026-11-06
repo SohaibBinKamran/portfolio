@@ -347,6 +347,21 @@ export const postcards = {
   ],
 };
 
+// What happened after the study. House rule: no dashes or hyphenated words.
+export const impact = {
+  eyebrow: "WHAT HAPPENED NEXT",
+  heading: "The research went to Lufthansa Innovation Hub",
+  intro:
+    "The findings did not stay in a deck. The Innovation Hub used them to rework the product.",
+  changes: [
+    { title: "Pricing", body: "Reworked in light of the findings." },
+    { title: "Usage", body: "Rethought around how people actually use it." },
+    { title: "Psychology partners", body: "New psychological collaborations brought in." },
+    { title: "New activities", body: "New activities added to the product." },
+  ],
+  footnote: "The Hub also set up a full flow in n8n to test the new product.",
+};
+
 export const closingCta = {
   heading: "Why wait? Take the leap. Make your design process stress-free today.",
   cta: "Let's Talk?",
