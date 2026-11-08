@@ -1583,3 +1583,71 @@ audit, tablet pass.
   does not publish.
 - **Uncommitted at time of writing:** `src/data/home.ts` changes the Zain Khatri testimonial role
   from "Sr. Product Designer | Leasepoint" to "Sr. Product Designer | Spur Solutions".
+
+---
+
+## 30. AI-first additions for the SadaPay application (Nov 2026)
+
+Commit `ed59603`. Motivated by SadaPay's "AI First Product Designer" JD.
+
+- **Home:** new `AiWorkflow` section (after Process, before the closing CTA). Data in
+  `src/data/home.ts` (`aiWorkflow`, `aiGuardrails`). Claude Code and Vercel are the primary
+  tools; Codex, ChatGPT, Lovable AI, Cursor are supporting. Includes an "AI guardrails" panel
+  (may / must never / how the UI shows confidence), tones `may`, `never`, `show`.
+- **Arrivals:** `buildNote` in `src/data/arrivals.ts` + `components/arrivals/BuildNote.tsx`,
+  placed between Decisions and Reflections. Vercel deliberately NOT in the stack (not used).
+  Prompts are paraphrased, by the user's OK.
+- **KNOCCS:** `figmaToCode` + `buildNote` in `src/data/knoccs.ts`; components `FigmaToCode.tsx`
+  (after Playground) and `BuildNote.tsx` (after Evolution). Playground colours now read
+  `var(--kn-*)` so the "one token source" claim is true; the live demo overrides `--kn-p2`.
+  Mapping table lists Figma node ids but is NOT real Figma Code Connect (user skipped it).
+- **CabinBlu:** `impact` in `src/data/cabinblu.ts` + `components/cabinblu/Impact.tsx` after
+  Arrivals. Neutral wording only (research went to Lufthansa Innovation Hub; n8n test flow).
+- **Shipped facts to keep consistent:** Spursol products (KNOCCS, Xoopah, Cogent, Connect)
+  shipped and live; Eurowings Arrivals board live, marketing used it to align VFR campaigns.
+- **Not done / on hold:** WanderLens Flutter build, SadaPay-style fintech prototype (ideas in
+  the "Prototype Ideas Lab" artifact), real Code Connect, mobile/tablet pass of new sections.
+- **Deploy note:** runs 42302309277 and 42303825798 failed at `deploy-pages` (stuck at
+  `syncing_files`, build passed). Retried on 2026-11-07.
+- `research-portfolio/` is untracked on purpose.
+
+---
+
+## 31. ClassQuest case study V2 goes live (Nov 2026)
+
+`/work/classquest` now serves **ClassQuest CaseStudy V2**. The earlier build is kept as
+**ClassQuest CaseStudy V1**.
+
+**V1 (the Aug 2026 build, see §17)**
+- Server rendered React sections under `.classquest` (`src/components/classquest/*`,
+  `src/data/classquest.ts`, `src/app/work/classquest/classquest.css`), 12 sections, static scroll.
+- Preserved three ways: git tag `classquest-casestudy-v1` (commit `ed59603`), the page file at
+  `src/app/work/classquest/_v1/page.tsx` (underscore folder, so it is not routed), and the V1
+  components and assets, which are untouched.
+- Restore: move `_v1/page.tsx` back to `../page.tsx` and change its css import to `./classquest.css`.
+
+**V2 (live)** was designed as a private artifact first (V1, V2, then "V3" in artifact naming, which is
+what shipped as site V2) and ported 1:1.
+- Same copy and story, rebuilt interactions: pinned scroll scene where five scattered tools merge
+  into the ClassQuest card, Phase 2 screenshot with linked highlights, before/after slider with the
+  mirrored cursor, lightbox for crops and screens, flashcard demo, brand flip cards, swatch copy,
+  product tabs, guidelines accordion, count ups and bars.
+- **Left rail** is a ruled "tracing worksheet" strip (paper only here, the page body stays the
+  original `#f3f3ee`): handwritten section names (Gloria Hallelujah), a pencil that writes each
+  name as you scroll and wears down, highlighter, ticks. Shows from 1380px wide, a "Sections"
+  menu button below that, and it fades out before the closing CTA.
+- Files: `src/app/work/classquest/page.tsx` (metadata + `<ClassQuestV2 />`),
+  `classquest-v2.css` (everything under `.cqv2`, container queries turned into media queries),
+  `src/components/classquest-v2/{ClassQuestV2.tsx, markup.ts, runtime.ts}`,
+  assets in `public/images/classquest/v2/` (13 jpg).
+- Architecture: markup is a static, author controlled HTML string rendered at build time (it is in
+  the exported HTML); `runtime.ts` attaches behaviour in one effect and returns a cleanup that
+  reverts GSAP and restores the markup (safe under strict mode and client navigation). The pin uses
+  CSS `position: sticky` with a scrubbed ScrollTrigger timeline, not a GSAP pin (a pin jittered).
+- **New dependency:** `gsap` (ScrollTrigger plugin). No new fonts: Circular Std, JetBrains Mono,
+  Instrument Serif, Inter and Gloria Hallelujah were already loaded in `layout.tsx`.
+- Copy rules kept: no em or en dashes, no compound hyphens (except the quoted thesis title).
+- The site NavBar and Footer wrap the page as usual; the artifact's fake browser frame, nav and
+  footer replicas were dropped. Hero is pulled up `-48px` under the sticky nav like V1.
+- To change V2 copy, edit `markup.ts` (HTML) or the data arrays at the top of `runtime.ts`
+  (guidelines, product screens). There is no generator in the repo.
