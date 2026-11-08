@@ -68,12 +68,14 @@ function RoamingCursor({
   label,
   drift,
   dir,
+  introKey,
 }: {
   className: string;
   bubbleClass: string;
   label: string;
   drift: { x: number[]; y: number[]; duration: number };
   dir: "ne" | "nw";
+  introKey: string;
 }) {
   return (
     <motion.div
@@ -81,6 +83,7 @@ function RoamingCursor({
         dir === "ne" ? "lg:items-end" : "lg:items-start"
       } ${className}`}
       aria-hidden
+      data-intro-piece={introKey}
       animate={{ x: drift.x, y: drift.y }}
       transition={{
         duration: drift.duration,
@@ -101,12 +104,20 @@ function RoamingCursor({
   );
 }
 
-export function Hero() {
+/**
+ * `variant="hybrid"` is what Home uses (Nov 2026): same sky, headline and
+ * roaming cursors, but a shorter hero with no location strip, so the work row
+ * (HeroWork) sits above the fold. "classic" is the earlier 882px hero with the
+ * Siegen strip, kept for reference.
+ */
+export function Hero({ variant = "classic" }: { variant?: "classic" | "hybrid" }) {
+  const hybrid = variant === "hybrid";
   const time = useSiegenTime();
 
   return (
-    <section className="relative -mt-16 flex min-h-[882px] flex-col overflow-hidden">
+    <section className={`relative -mt-16 flex flex-col overflow-hidden ${hybrid ? "min-h-[560px]" : "min-h-[882px]"}`}>
       <div
+        data-intro-piece="sky"
         className="pointer-events-none absolute inset-x-0 -top-px -z-10 h-[800px] [mask-image:linear-gradient(180deg,black_0%,black_28%,transparent_88%)]"
         aria-hidden
       >
@@ -121,33 +132,39 @@ export function Hero() {
       </div>
 
       <RoamingCursor
-        className="left-[13%] top-[40%]"
+        className={hybrid ? "left-[8%] top-[50%]" : "left-[13%] top-[40%]"}
         dir="ne"
         bubbleClass="border-[#4434ad] bg-accent-purple text-white"
         label={hero.role}
+        introKey="roam-0"
         drift={{ x: [0, 60, 20, 90, 0], y: [0, 40, 110, 60, 0], duration: 26 }}
       />
       <RoamingCursor
-        className="right-[11%] top-[54%]"
+        className={hybrid ? "right-[8%] top-[62%]" : "right-[11%] top-[54%]"}
         dir="nw"
         bubbleClass="border-[#212529] bg-accent-lime text-ink"
         label={hero.annotation}
+        introKey="roam-1"
         drift={{ x: [0, -70, -20, -100, 0], y: [0, -50, -100, -30, 0], duration: 30 }}
       />
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-7 px-6 pb-40 pt-28 text-center">
-        <h1 className="max-w-4xl text-5xl leading-[1.1] tracking-tight md:text-[64px] md:leading-[1.08]">
+      <div className={`flex flex-1 flex-col items-center justify-center gap-7 px-6 text-center ${hybrid ? "pb-14 pt-28" : "pb-40 pt-28"}`}>
+        <h1 data-intro-piece="head" className="max-w-4xl text-5xl leading-[1.1] tracking-tight md:text-[64px] md:leading-[1.08]">
           <span className="text-ink/45">{hero.headlineMuted} </span>
           <span className="text-ink">{hero.headlineStrong}</span>
         </h1>
-        <p className="font-sans text-lg text-ink-muted">{hero.status}</p>
-        <PillButton href="/work">{hero.cta}</PillButton>
+        <p data-intro-piece="sub" className="font-sans text-lg text-ink-muted">{hero.status}</p>
+        <div data-intro-piece="cta">
+          <PillButton href="/work">{hero.cta}</PillButton>
+        </div>
       </div>
 
-      <div className="flex w-full items-center justify-between bg-border-soft px-6 py-5 font-sans text-base text-ink md:px-14 md:text-lg">
-        <span>{hero.location}</span>
-        {time && <span>{time}</span>}
-      </div>
+      {!hybrid && (
+        <div data-intro-piece="strip" className="flex w-full items-center justify-between bg-border-soft px-6 py-5 font-sans text-base text-ink md:px-14 md:text-lg">
+          <span>{hero.location}</span>
+          {time && <span>{time}</span>}
+        </div>
+      )}
     </section>
   );
 }

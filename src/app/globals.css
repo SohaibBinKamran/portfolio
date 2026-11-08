@@ -155,3 +155,9 @@ h1, h2, h3, h4, h5, h6 {
 .aerial-country-label.show {
   opacity: 1;
 }
+
+/* Home intro (src/components/home/HomeIntro.tsx). The overlay only exists
+   while <html data-intro> is set; until each hero piece inks in, it is hidden. */
+.home-intro { display: none; }
+html[data-intro] .home-intro { display: block; }
+html[data-intro] [data-intro-piece] { opacity: 0; }

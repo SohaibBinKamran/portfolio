@@ -62,7 +62,7 @@ export function NavBar() {
 
   return (
     <header className="sticky top-4 z-50 flex justify-start px-4 sm:px-6 md:justify-center">
-      <nav className="flex w-full max-w-fit items-center gap-1 rounded-[14px] border border-white/[0.08] bg-[#1c1c1c]/75 px-2 py-2 font-sans text-sm text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl backdrop-saturate-150">
+      <nav data-intro-piece="nav" className="flex w-full max-w-fit items-center gap-1 rounded-[14px] border border-white/[0.08] bg-[#1c1c1c]/75 px-2 py-2 font-sans text-sm text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl backdrop-saturate-150">
         <span className="mr-1 truncate px-3 font-sans text-[15px] leading-none text-white">
           <span className="md:hidden">SBK</span>
           <span className="hidden md:inline">Sohaib Bin Kamran</span>

@@ -6,6 +6,7 @@ import "./globals.css";
 import { NavBar } from "@/components/layout/NavBar";
 import { Footer } from "@/components/layout/Footer";
 import { SiteCursor } from "@/components/ui/SiteCursor";
+import { CaseTransition } from "@/components/layout/CaseTransition";
 
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -93,9 +94,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${instrumentSerif.variable} ${inter.variable} ${gloriaHallelujah.variable} ${circularStd.variable} ${mulish.variable} ${bebasNeue.variable} ${caveat.variable} ${manrope.variable} ${plusJakartaSans.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <head>
+        {/* Home intro gate: hides the hero before first paint so the redline
+            intro (src/components/home/HomeIntro.tsx) can build it. Every
+            full load or refresh of "/" (client-side navigation back to Home
+            does not run this script), never with reduced motion. Falls back to the plain page after 4s. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=document.documentElement;if(location.pathname!=="/")return;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.setAttribute("data-intro","on");setTimeout(function(){if(d.getAttribute("data-intro")==="on")d.removeAttribute("data-intro")},4000)}catch(e){}})();`,
+          }}
+        />
         <link
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap"
@@ -113,6 +124,7 @@ export default function RootLayout({
           })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`}
         </Script>
         <SiteCursor />
+        <CaseTransition />
         <NavBar />
         <main className="flex-1">{children}</main>
         <Footer />
