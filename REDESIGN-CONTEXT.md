@@ -74,7 +74,7 @@ Colours: read solid `fill="#…"` / `stop-color` from the SVG, or `get_variable_
 
 | Page | Route | Status |
 |---|---|---|
-| Home | `/` | **Redesigned ✅ (Aug 2026)** — matched to Figma `node 912-2806` + `Home.svg`. See §12. |
+| Home | `/` | **Redesigned ✅ (Aug 2026)** — matched to Figma `node 912-2806` + `Home.svg`. See §12. Nov 2026: new "hybrid" layout (shorter hero, no time strip, work row above the fold), redline intro and card to case study transition, uncommitted. See §32. |
 | About | `/about` | **Redesigned ✅ (Aug 2026)** — matched to Figma `node 912-3939` + `about me header.svg` / `AboutMe.svg`. See §13. |
 | Work index | `/work` | **Redesigned ✅ (Aug 2026)** — matched to Figma `node 912-5204` + `WorkDisplay.svg`. See §14. |
 | CabinBlu case study | `/work/cabinblu` | **Aligned to new design ✅ (Aug 2026)** — targeted pass over the existing bespoke build to match Figma `node 869-7278` + `Redesign July/CabinBlu-Project Diary Study.svg` (fresh Aug 28). See §18. |
@@ -1590,7 +1590,8 @@ audit, tablet pass.
 
 Commit `ed59603`. Motivated by SadaPay's "AI First Product Designer" JD.
 
-- **Home:** new `AiWorkflow` section (after Process, before the closing CTA). Data in
+- **Home:** new `AiWorkflow` section (after Process, before the closing CTA). **Superseded by §33**
+  (merged into Process as a carousel; `AiWorkflow.tsx` removed). Data in
   `src/data/home.ts` (`aiWorkflow`, `aiGuardrails`). Claude Code and Vercel are the primary
   tools; Codex, ChatGPT, Lovable AI, Cursor are supporting. Includes an "AI guardrails" panel
   (may / must never / how the UI shows confidence), tones `may`, `never`, `show`.
@@ -1608,7 +1609,7 @@ Commit `ed59603`. Motivated by SadaPay's "AI First Product Designer" JD.
 - **Not done / on hold:** WanderLens Flutter build, SadaPay-style fintech prototype (ideas in
   the "Prototype Ideas Lab" artifact), real Code Connect, mobile/tablet pass of new sections.
 - **Deploy note:** runs 42302309277 and 42303825798 failed at `deploy-pages` (stuck at
-  `syncing_files`, build passed). Retried on 2026-11-07.
+  `syncing_files`, build passed). Third run (42313474181, 2026-11-07) succeeded; verified live.
 - `research-portfolio/` is untracked on purpose.
 
 ---
@@ -1651,3 +1652,147 @@ what shipped as site V2) and ported 1:1.
   footer replicas were dropped. Hero is pulled up `-48px` under the sticky nav like V1.
 - To change V2 copy, edit `markup.ts` (HTML) or the data arrays at the top of `runtime.ts`
   (guidelines, product screens). There is no generator in the repo.
+- **Deployed 2026-11-08** from commit `35f46d4` (workflow run 42494181565, green). Verified live:
+  `class="cqv2"` markup and `/images/classquest/v2/hero.jpg` both serve from sohaibbinkamran.com.
+- **Verification done:** `tsc`, eslint, clean worktree `next build`, desktop (1440) and phone (390)
+  screenshots. **Not done:** real touch device, Safari, full tablet pass.
+- **Known follow-ups:** the home card
+  and `CaseTransition` still reference V1 hero asset `/images/classquest/hero.jpg` (still present).
+
+---
+
+## 32. Homepage intro, case study transition and hybrid layout (Nov 2026)
+
+Prototyped first in a private "Loader Lab" artifact (10 loader ideas). The user picked
+#1 Redline + #3 multiplayer cursors for Home and #2 affinity notes + #5 orb for case studies.
+**All of this is uncommitted at time of writing**, and deploys are manual (§23).
+
+### 32.1 Homepage intro (`src/components/home/HomeIntro.tsx`)
+About 2.95s, three beats, drawn on a fixed canvas over the real hero:
+1. **Everything starts as redline.** Each piece is measured from the live DOM: headline words are
+   stroked in the real Instrument Serif lines, body text becomes skeleton bars, the button a pill,
+   work cards a box with a crossed image placeholder. Labels show real specs ("H1 Instrument Serif
+   64/69", "Pill 132 x 41"). Faint dashed slots mark where pieces belong, on a dot grid.
+2. **Cursors drag the redline into place.** Research (purple) brings the headline, Wireframe (blue)
+   the work row (or the location strip on the classic layout), Polish (lime) the status line and
+   button. Selection box with handles while dragging; pieces stay redline.
+3. **The redline becomes real.** Measurement lines check the spacing, then each live element
+   condenses in top to bottom through a CSS mask of fine dust (random 2px round specks, 24 levels;
+   it was 6px Bayer squares until the user asked for dust). The sky fades in, and Research and
+   Polish swap labels and land pixel exact (within 0.3px) on the hero's roaming cursors.
+
+- **Gate:** an inline script in `layout.tsx` `<head>` sets `html[data-intro="on"]` before first
+  paint on every full load or refresh of `/` (the user wants it on every refresh),
+  never with `prefers-reduced-motion`. Client side navigation back to Home does not run it.
+  4s failsafe if JS never takes over. `<html>` has `suppressHydrationWarning` for this attribute.
+- **Hiding:** `globals.css` hides `[data-intro-piece]` while `html[data-intro]` is set; pieces are
+  tagged `nav`, `head`, `sub`, `cta`, `strip` (optional), `c0` to `c2` (optional), `sky`,
+  `roam-0`, `roam-1`. The real content stays in the DOM, so screen readers and SEO are unaffected.
+- **Skip:** any click, key, wheel or touch jumps near the end; a "Skip intro" pill is shown.
+  Resize finishes it immediately. Starting scrolled (restored position) shows the page as is.
+- Wireframe drags as many cards as fit on screen, else the strip, else just crosses the screen
+  (phones, where the cards stack).
+- Strict Mode remount is handled with a short `resumeUntil` window.
+- **Testing tip:** rAF pauses while the Browser pane is hidden. Replace `requestAnimationFrame`
+  with a queue and tick it by hand to step frames.
+
+### 32.2 Card to case study transition (`src/components/layout/CaseTransition.tsx`)
+Mounted once in the root layout so it survives the route change. A capture phase click listener
+intercepts plain left clicks on links to `/work/<slug>` (8 known slugs).
+1. Ripple at the click, then the page washes to the project colour (CabinBlu `#10356c`,
+   ClassQuest `#c9d8fb`, Cinefatic `#2b1a22`; others derive a colour from the card image).
+2. **First case study of the tab** (sessionStorage `sbk-case-seen`), for CabinBlu, ClassQuest and
+   Cinefatic only: 12 real research notes fly out of the card and cluster into three themes
+   (stacked vertically under 640px). Every other time: the card image itself peels into dots.
+3. The dots wrap into a rotating orb with a halo of loose specks and an "Opening X" readout. This
+   is the loading state: it holds until the new route has rendered and its hero image has loaded
+   (stand in box after 5s, failsafe at 15s).
+4. The orb bursts and the dots land on the hero (largest image near the top of `main`, else a
+   centred stand in box), then the page shows through.
+- Particles are fine round dust (92 across, 0.6 to 3px, size and opacity jitter, shimmer);
+  additive blending on dark washes. Skipped for reduced motion, modified clicks, new tab links and
+  back/forward. Any click while it plays skips to the landing.
+- Notes only exist for the three home projects. Writing notes for WanderLens, OpenSeat, Xoopah,
+  KNOCCS and Arrivals would give them the notes beat too.
+
+### 32.3 Hybrid homepage layout (now the Home page)
+The user preferred work visible at first glance, so a hybrid of the old Home and a Loader Lab
+layout was built at a temporary `/hybrid` route for comparison, then **promoted to `/`** at the
+user's request. `/hybrid` was deleted. `src/app/page.tsx` now renders
+`<HomeIntro /> <Hero variant="hybrid" /> <HeroWork />` and then the rest of the sections as before.
+- `Hero variant="hybrid"`: same sky, headline and roaming cursors, `min-h-[560px]` instead of
+  882px, no Siegen location and time strip (the user saw no value in it).
+- `src/components/home/HeroWork.tsx` replaces the stacked Selected Work section: three frameless,
+  image first cards (rounded 18px image, uppercase label, serif title, muted blurb), "See all
+  work" pill. Tags are un-dashed ("MSc. HCI · Master Thesis"). At 1440x900 the whole row sits
+  above the fold.
+- Spacing: row `max-w-[1320px]`, column gap 40px (`gap-x-10`) and 56px from `lg` (`lg:gap-x-14`),
+  stacked gap 56px (`gap-y-14`). Widened from 32px at the user's request because the hover wash
+  (12px past each card) nearly touched the neighbouring card; now about 32px stays clear.
+- Hover matches the testimonial cards: same spring (y -12, scale 1.02), a wash in the project's
+  own tint grows in behind the card, the image tilts forward 4deg and zooms, an arrow slides in.
+- `SelectedWork.tsx` (the big stacked cards) is no longer rendered anywhere but is kept in the
+  repo; `Hero` still supports `variant="classic"` (882px with the Siegen strip) for reference.
+  Delete both if the old layout is never coming back.
+
+### 32.4 Verification
+`tsc`, eslint on new files, and a static `next build` pass. Beats stepped frame by frame at
+1440x900 and 1024x768; mobile only checked numerically. Hover and the dust reveal were confirmed
+by the user on the dev server. Not done: phone and Safari passes, real touch device.
+
+---
+
+## 33. Process and AI merged into one section, with a carousel (Nov 2026)
+
+The separate "How I work with AI" section (§30) read like a second answer to "How I bring ideas
+to life", and the user found it cluttered and texty. Explored in the private **5V3** artifact
+(tabs for five concepts, a four step carousel, a Claude styled merge and a portfolio styled
+merge, plus five Ship slide thumbnail ideas). The user picked the **portfolio styled merge** with
+the **stack of releases** on the Ship slide. **Uncommitted at time of writing.**
+
+### 33.1 What is on the page now
+One section, `src/components/home/Process.tsx`, in this order:
+1. "Process" label, "How I bring ideas to life", new intro (`processIntro`).
+2. The three Process cards. Copy shortened to one line each plus an `outputs` list shown as
+   "Interviews · Journey maps · Success metrics". Steps 2 and 3 have `ai: true` and get a small
+   blue `AI` superscript (accent-blue). The old "step-by-step", "lo-fi", "hi-fi", "follow-up"
+   copy is gone (dash rule).
+3. Two tone heading: "AI speeds up steps 2 and 3." in `#9b9ba5`, "I keep the judgment." in ink
+   (same muted/strong pattern as the hero).
+4. `AiCarousel` (`src/components/home/AiCarousel.tsx`), four slides: Frame, Prompt, Review, Ship.
+5. "Tools I use": Claude Code, Vercel, Codex, ChatGPT, Lovable, Cursor logos, greyscale at 75%
+   opacity, full colour on hover.
+
+`AiWorkflow.tsx` was removed from `page.tsx` and the repo (copy kept outside the repo). The
+`aiWorkflow` / `aiGuardrails` data is gone; the new data is `processIntro`, `process[].outputs`,
+`process[].ai` and `aiFit` in `src/data/home.ts`.
+
+### 33.2 Carousel details
+- **No Claude branding.** The user asked for the portfolio's own look, not clay/charcoal Claude
+  styling: white slide card with `shadow-soft`, cream inner panel, Instrument Serif step names,
+  ink and ink-muted text, `border-soft` lines, pill buttons. Tools are named, never used as decor.
+- Slides (each a caption left, visual right; stacks under `md`):
+  - **Frame:** a "Brief" note (Goal, Rule, Done when). Handwritten "before any prompt" in
+    Gloria Hallelujah (`font-hand`, accent-blue).
+  - **Prompt:** light code card `Playground.tsx`, soft red/green diff lines, "45 values moved to
+    tokens" (the real KNOCCS token refactor).
+  - **Review:** `arrivals.ts` diff 81,000 to 181,430 (the real Arrivals audit) with Approve /
+    Request changes pills (clickable), handwritten "checked the source".
+  - **Ship:** no cream panel. A stack of three browser windows (ClassQuest, KNOCCS, Arrivals
+    Board on top with a Live dot) from `aiFit.shipped`, using `/images/work-*.png`. Fans open
+    on hover, focus or tap (±125px and ±10deg on desktop, ±60px on phones). Vertically centred
+    against the caption.
+- Behaviour: auto advance every 5s with a progress bar under each step name (bar width set via
+  refs, no per frame re-render); pauses on hover; runs only while on screen
+  (IntersectionObserver); any click, arrow key or swipe takes over and stops auto play;
+  off screen slides are `inert` and `aria-hidden`; reduced motion shows everything static.
+- Logos: `public/images/logos/{claude-code,vercel,codex,chatgpt,lovable,cursor}.svg`, taken
+  from the open source `@lobehub/icons-static-svg` set (ChatGPT uses the OpenAI mark).
+- Removed on request: the "AI may / AI never" chip strip and the "how the UI shows
+  confidence" panel. If guardrails need to come back, the suggestion was a fifth slide.
+
+### 33.3 Verification
+`tsc` and eslint clean. Checked on the dev server at 1024 and 1280 wide: carousel aligns with the
+cards, Ship stack centred against its caption, no console errors; 375px has no horizontal
+overflow. Not done: watching slides animate end to end (rAF and transitions stall while the
+Browser pane is hidden), Safari, real touch device, deploy.
