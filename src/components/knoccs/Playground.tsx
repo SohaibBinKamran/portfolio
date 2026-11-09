@@ -181,7 +181,7 @@ export function Playground() {
                       onFocus={() => setInputFocused(true)}
                       onBlur={() => setInputFocused(false)}
                       placeholder="Search for conversation and more..."
-                      className="flex-1 bg-transparent text-[14px] text-[color:var(--kn-s2)] placeholder:text-[color:var(--kn-s5)] focus:outline-none"
+                      className="min-w-0 flex-1 bg-transparent text-[14px] text-[color:var(--kn-s2)] placeholder:text-[color:var(--kn-s5)] focus:outline-none"
                     />
                     <span className="shrink-0 text-[12px] text-[color:var(--kn-s5)]">Ctrl + K</span>
                   </div>

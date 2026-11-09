@@ -79,6 +79,9 @@
 .cqv2 .lockc .capw{width:52px;height:47px}
 .cqv2 .lockc b{font-size:24px;color:var(--ink);letter-spacing:-.02em}
 .cqv2 .lockc span{font-size:13px;color:var(--body)}
+/* Phones: the five tool cards are pinned by left % for desktop, which pushes the
+   right-hand two off the screen. Shrink the cards and anchor those two to the right edge. */
+@media (max-width:520px){.cqv2 .cv .tool .in{font-size:12px;gap:7px;padding:7px 10px 7px 7px;white-space:normal;max-width:min(46vw,190px)}.cqv2 .tool .in small{font-size:10.5px}.cqv2 .cv .tool .ic{width:26px;height:26px;border-radius:7px}.cqv2 .tool .ic svg{width:16px;height:16px}.cqv2 .cv>.tool:nth-child(1){left:0!important;top:0!important}.cqv2 .cv>.tool:nth-child(2){left:auto!important;right:0;top:12%!important}.cqv2 .cv>.tool:nth-child(3){left:auto!important;right:0;top:70%!important}.cqv2 .cv>.tool:nth-child(4){left:0!important;top:59%!important}.cqv2 .cv>.tool:nth-child(5){left:14%!important;top:82%!important}.cqv2 .pn .cv{min-height:420px}.cqv2 .cv .lockc{padding:20px 22px}.cqv2 .lockc b{font-size:20px}}
 .cqv2 .cvcap{position:absolute;left:0;right:0;bottom:-8px;text-align:center;font:400 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);height:12px}
 .cqv2 .cvcap span{position:absolute;inset:0;transition:opacity .4s}
 .cqv2 .cvcap .b{opacity:0}

@@ -1796,3 +1796,49 @@ One section, `src/components/home/Process.tsx`, in this order:
 cards, Ship stack centred against its caption, no console errors; 375px has no horizontal
 overflow. Not done: watching slides animate end to end (rAF and transitions stall while the
 Browser pane is hidden), Safari, real touch device, deploy.
+
+## 34. Mobile and foldable responsiveness pass (Nov 2026)
+
+Worker chat, uncommitted. Whole site audited on phone widths (320 iPhone SE, 344 Galaxy Fold
+cover, 360, 390 iPhone, 430 Pro Max, 540 Surface Duo single screen, 720 fold inner, 1114 Duo
+spanned) with a mobile emulated headless Edge (touch, iPhone UA, reduced motion). Most pages
+were already responsive; these were the real problems and fixes.
+
+### 34.1 Site wide
+- `globals.css`: `html, body { overflow-x: clip }` so no page can ever scroll sideways (clip,
+  not hidden, so the sticky nav still works). Tap highlight removed.
+- `globals.css`: on touch screens (`pointer: coarse`) every input, textarea and select is 16px.
+  iOS Safari zooms the page when a field under 16px gets focus (the KNOCCS playground and
+  Figma to Code search fields were 14px).
+- `NavBar.tsx`: menu button keeps its 32px look but gets a 44px hit area (`after:-inset-1.5`).
+  Mobile menu panel caps at `100dvh - 88px` and scrolls, for landscape phones.
+- `Lightbox.tsx` (`78dvh`) and `AerialMode.tsx` (`82dvh`): `vh` changed to `dvh` so the
+  iPhone toolbar never covers the photo or the panel.
+
+### 34.2 Per page
+- **WanderLens hero:** the 64px "WANDERLENS" wordmark was 460px wide, so the whole page scrolled
+  sideways on every phone (scrollWidth 486). Now `min(64px, 11.5vw)` and `min(84px, 11.5vw)`
+  from `sm`.
+- **KNOCCS:** Anatomy card (drawn at its real 340px) shrinks with CSS `zoom` (0.64 / 0.74 /
+  0.88 / 1 at <360 / 360 / 400 / sm) so the card and all seven markers fit; stage padding and
+  height smaller on phones. Type scale "Heading 1" no longer truncates (`min(size, 10.5vw)`),
+  panels `p-6 sm:p-8`. Evolution V1.1 button row and sidebar pair wrap instead of clipping.
+- **ClassQuest V2:** the five "scattered tools" cards were placed by left % for desktop and two
+  ran off screen. Under 520px the cards are smaller, can wrap to two lines, and get their own
+  positions (`classquest-v2.css`, the `max-width:520px` rule next to `.cvcap`). The GSAP merge
+  still works because it reads `offsetLeft`.
+- **Home Off duty:** the fanned polaroid stack spans 348px and was cut at the right edge; the
+  stack is now a fixed 348px (384px from md) and zooms to 0.78 / 0.86 under 360 / 400px.
+- **About hero:** min height 440px on phones (was 560px), which left a big empty band.
+- **Arrivals board:** route rows use `64px / minmax(0,1fr) / auto` and a 74px button under
+  400px, so "Tirana & Pristina" no longer squeezes to three lines next to HIDE.
+
+### 34.3 Verification
+`tsc` clean. Overflow audit (every element against the viewport edge) on all 13 routes at 320,
+344, 390, 540 and 720: zero offenders (before: WanderLens scrolled sideways at every phone
+width). Screenshots checked at 320 and 390 for WanderLens, KNOCCS, ClassQuest, Home and About.
+Tested on the other chat's dev server (port 3000), no server started here. Not done: a real
+iPhone or Duo, Safari specifically (CSS `zoom` is supported in Safari, Chrome and Firefox 126+),
+landscape screenshots, and Surface Duo hinge specific layouts (the spanned 1114px view gets the
+normal desktop layout, which is acceptable). Copy still has em dashes in places (Home skills
+text, About bio, case studies); not touched here.

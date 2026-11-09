@@ -57,7 +57,9 @@ export function OffDuty() {
         <motion.div
           initial="rest"
           whileHover="open"
-          className="relative mx-auto h-[300px] w-full max-w-xs cursor-default md:max-w-sm"
+          // The fanned prints span 348px; zoom shrinks the whole stack on narrow
+          // phones so the last print is not cut off at the screen edge.
+          className="relative mx-auto h-[300px] w-[348px] max-w-none cursor-default [zoom:0.78] min-[360px]:[zoom:0.86] min-[400px]:[zoom:1] md:w-[384px]"
         >
           {stack.map((photo, i) => (
             <motion.div

@@ -646,7 +646,7 @@ function GlobeOverlay({ onClose }: { onClose: () => void }) {
           className="fixed inset-0 z-[110] flex items-center justify-center bg-black/72 p-8"
           onClick={(e) => { if (e.target === e.currentTarget) { setActivePlace(null); setSlideIndex(0); } }}
         >
-          <div className="max-h-[82vh] w-full max-w-[560px] overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#121212]">
+          <div className="max-h-[82dvh] w-full max-w-[560px] overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#121212]">
             <div className="relative border-b border-white/[0.08] px-8 py-7">
               <button
                 type="button"

@@ -112,7 +112,7 @@ export function Lightbox({
                 roll printed bottom-left and the location bottom-right, like
                 a contact-sheet stamp. */}
             <div className="rounded-[6px] bg-[#0a0a0a] p-3 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] md:p-4">
-              <div className={`relative w-full max-h-[78vh] overflow-hidden rounded-[2px] ${aspectClass[photo.aspect]}`}>
+              <div className={`relative w-full max-h-[78dvh] overflow-hidden rounded-[2px] ${aspectClass[photo.aspect]}`}>
                 {photo.src ? (
                   <Image
                     src={photo.src}

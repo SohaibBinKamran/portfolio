@@ -24,7 +24,7 @@ function Sparkle() {
 
 export function AboutHero() {
   return (
-    <section className="relative -mt-12 flex min-h-[560px] flex-col items-center justify-center gap-11 overflow-hidden px-6 py-24 text-center md:min-h-[600px]">
+    <section className="relative -mt-12 flex min-h-[440px] flex-col items-center justify-center gap-9 overflow-hidden px-5 py-20 text-center sm:min-h-[560px] sm:gap-11 sm:px-6 sm:py-24 md:min-h-[600px]">
       {/* Pre-baked desaturated sky, already faded to white toward the centre
           (Figma "about me header" — full-bleed pattern fill). */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>

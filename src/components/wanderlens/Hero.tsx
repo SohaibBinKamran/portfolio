@@ -15,7 +15,7 @@ export function Hero() {
           </p>
 
           <h1
-            className="wl-wordmark mt-8 text-[64px] leading-[0.96] text-[var(--wl-forest)] sm:text-[84px]"
+            className="wl-wordmark mt-8 text-[min(64px,11.5vw)] leading-[0.96] text-[var(--wl-forest)] sm:text-[min(84px,11.5vw)]"
           >
             {meta.title}
           </h1>

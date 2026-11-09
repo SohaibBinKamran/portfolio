@@ -38,7 +38,7 @@ export function Foundations() {
           </div>
 
           <div className="flex flex-col gap-8">
-            <div className="kn-panel p-8">
+            <div className="kn-panel p-6 sm:p-8">
               <h3 className="text-[15px] font-semibold text-[color:var(--kn-ink)]">Type scale</h3>
               <div className="mt-6 flex flex-col">
                 {typeScale.map((step) => (
@@ -48,7 +48,11 @@ export function Foundations() {
                   >
                     <span
                       className="truncate text-[color:var(--kn-ink)]"
-                      style={{ fontSize: step.size, lineHeight: `${step.lineHeight}px` }}
+                      style={{
+                        // Big steps shrink on narrow phones so "Heading 1" never truncates.
+                        fontSize: `min(${step.size}px, 10.5vw)`,
+                        lineHeight: `${step.lineHeight}px`,
+                      }}
                     >
                       {step.name}
                     </span>
@@ -60,7 +64,7 @@ export function Foundations() {
               </div>
             </div>
 
-            <div className="kn-panel p-8">
+            <div className="kn-panel p-6 sm:p-8">
               <h3 className="text-[15px] font-semibold text-[color:var(--kn-ink)]">Iconography</h3>
               <p className="mt-1 text-[13px] leading-[1.6] text-[color:var(--kn-muted)]">
                 15 of the 50+ icons, drawn at 24px to one weight.

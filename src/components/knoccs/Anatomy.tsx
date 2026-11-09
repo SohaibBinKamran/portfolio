@@ -28,8 +28,10 @@ export function Anatomy() {
         <h2 className="mt-5 max-w-[640px] text-[32px] sm:text-[40px]">{anatomy.heading}</h2>
 
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-[1.05fr_1fr]">
-          <div className="kn-stage flex min-h-[340px] items-center justify-center overflow-x-auto rounded-[20px] p-10">
-            <div className="relative h-[116px] w-[340px] shrink-0 scale-[1.0] sm:scale-[1.15]">
+          <div className="kn-stage flex min-h-[220px] items-center justify-center overflow-x-auto rounded-[20px] p-6 sm:min-h-[340px] sm:p-10">
+            {/* The card is drawn at its real 340px Figma size; zoom shrinks it
+                (markers included) to fit narrow phones instead of clipping. */}
+            <div className="relative h-[116px] w-[340px] shrink-0 scale-[1.0] [zoom:0.64] min-[360px]:[zoom:0.74] min-[400px]:[zoom:0.88] sm:scale-[1.15] sm:[zoom:1]">
               <div className="absolute inset-0 rounded-[10px] bg-[#F7F5FA]" />
 
               <span className="absolute left-[12px] top-[21px] size-[8px] rounded-full bg-[#7620BA]" />

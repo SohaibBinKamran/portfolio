@@ -31,7 +31,7 @@ function ButtonChaos() {
 function GovernedButton() {
   const [state, setState] = useState<"to-me" | "assign" | "assigned">("to-me");
   return (
-    <div className="flex items-center justify-center gap-3 p-2">
+    <div className="flex flex-wrap items-center justify-center gap-3 p-2">
       <button
         onClick={() => setState("to-me")}
         className={`rounded-[8px] border px-4 py-2.5 text-[13px] font-medium transition-colors ${
@@ -69,7 +69,7 @@ function GovernedButton() {
 function NavDuplicate() {
   const items = ["Dashboard", "Client", "Conversation"];
   return (
-    <div className="flex items-center justify-center gap-4 p-2">
+    <div className="flex flex-wrap items-center justify-center gap-4 p-2">
       {["#17112A", "#FFFFFF"].map((bg, i) => (
         <div key={bg} className="w-[150px] rounded-[10px] p-3" style={{ background: bg, border: i === 1 ? "1px solid #EAE7EB" : "none" }}>
           {items.map((label, idx) => (
@@ -145,7 +145,7 @@ function Comparison({ item }: { item: (typeof evolution.comparisons)[number] }) 
   const active = showAfter ? item.after : item.before;
 
   return (
-    <div className="kn-panel flex flex-col gap-6 p-8">
+    <div className="kn-panel flex flex-col gap-6 p-5 sm:p-8">
       <div className="flex items-center justify-between gap-4">
         <h3 className="text-[18px]">{item.title}</h3>
         <div className="inline-flex shrink-0 rounded-full bg-[color:var(--kn-hover-light)] p-1">
@@ -168,7 +168,7 @@ function Comparison({ item }: { item: (typeof evolution.comparisons)[number] }) 
         </div>
       </div>
 
-      <div className="kn-stage flex min-h-[160px] items-center justify-center rounded-[16px]">
+      <div className="kn-stage flex min-h-[160px] items-center justify-center overflow-hidden rounded-[16px] p-2">
         {showAfter ? render.after : render.before}
       </div>
 

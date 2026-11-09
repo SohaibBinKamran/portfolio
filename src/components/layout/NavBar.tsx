@@ -104,7 +104,7 @@ export function NavBar() {
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          className="ml-1 flex h-8 w-8 items-center justify-center rounded-[10px] text-white/80 transition-colors hover:bg-white/10 hover:text-white md:hidden"
+          className="relative ml-1 flex h-8 w-8 items-center justify-center rounded-[10px] text-white/80 transition-colors after:absolute after:-inset-1.5 after:content-[''] hover:bg-white/10 hover:text-white md:hidden"
         >
           <MenuIcon open={menuOpen} />
         </button>
@@ -112,7 +112,7 @@ export function NavBar() {
 
       {/* Mobile menu panel */}
       {menuOpen && (
-        <div className="absolute left-4 right-4 top-[calc(100%+8px)] flex flex-col gap-1 rounded-[14px] border border-white/[0.08] bg-[#1c1c1c]/95 p-2 font-sans text-sm text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl backdrop-saturate-150 md:hidden">
+        <div className="absolute left-4 right-4 top-[calc(100%+8px)] flex max-h-[calc(100dvh-88px)] flex-col gap-1 overflow-y-auto overscroll-contain rounded-[14px] border border-white/[0.08] bg-[#1c1c1c]/95 p-2 font-sans text-sm text-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl backdrop-saturate-150 md:hidden">
           {links.map((link) => {
             const active =
               link.href === "/"

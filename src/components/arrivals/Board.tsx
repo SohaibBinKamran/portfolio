@@ -281,7 +281,7 @@ export function Board() {
                   aria-expanded={open}
                   aria-controls={`drawer-${r.id}`}
                   onClick={() => setOpenId(open ? null : r.id)}
-                  className="grid w-full grid-cols-[76px_1fr_auto] items-center gap-x-3 gap-y-3 px-4 py-4 text-left sm:grid-cols-[84px_1.2fr_1.5fr_auto] sm:px-5"
+                  className="grid w-full grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-3 px-3.5 py-4 min-[400px]:grid-cols-[76px_minmax(0,1fr)_auto] min-[400px]:gap-x-3 min-[400px]:px-4 text-left sm:grid-cols-[84px_1.2fr_1.5fr_auto] sm:px-5"
                 >
                   <span className="ar-code text-[13px]">{r.code}</span>
                   <span className="flex flex-col">
@@ -305,7 +305,7 @@ export function Board() {
                     </span>
                     <span className="ar-mono text-[9.5px] text-[color:var(--b-row-dim)] opacity-80">{r.headlineLabel}</span>
                   </span>
-                  <span className="ar-view min-w-[88px] text-center">{open ? "HIDE" : "VIEW DATA"}</span>
+                  <span className="ar-view min-w-[74px] text-center min-[400px]:min-w-[88px]">{open ? "HIDE" : "VIEW DATA"}</span>
                 </button>
                 {open && (
                   <div id={`drawer-${r.id}`} role="region" aria-label={`${r.name} data`}>
