@@ -26,20 +26,23 @@ export function Testimonials() {
 
       <div className="mx-auto mb-24 grid max-w-5xl items-start gap-6 md:grid-cols-3">
         {testimonials.map((t, i) => {
+          // The middle card sits 16px higher on desktop only. Done with a margin
+          // (md:-mt-4) rather than a motion offset, so on phones all three cards
+          // keep the same gap.
           const raised = i === 1;
           return (
           <motion.figure
             key={t.name}
             initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: raised ? -16 : 0 }}
-            whileHover={{ y: raised ? -30 : -12, scale: 1.02 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -12, scale: 1.02 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{
               opacity: { duration: 0.5, delay: i * 0.1 },
               y: { type: "spring", stiffness: 240, damping: 14, mass: 0.9 },
               scale: { type: "spring", stiffness: 240, damping: 14, mass: 0.9 },
             }}
-            className="group relative flex h-full flex-col overflow-hidden rounded-[20px] border-4 border-black/[0.04] bg-white p-6 shadow-sm transition-shadow duration-500 hover:shadow-xl"
+            className={`group relative flex h-full flex-col overflow-hidden rounded-[20px] ${raised ? "md:-mt-4" : ""} border-4 border-black/[0.04] bg-white p-6 shadow-sm transition-shadow duration-500 hover:shadow-xl`}
           >
             {/* warm gradient wash on hover */}
             <div

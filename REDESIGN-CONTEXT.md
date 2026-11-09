@@ -1842,3 +1842,27 @@ iPhone or Duo, Safari specifically (CSS `zoom` is supported in Safari, Chrome an
 landscape screenshots, and Surface Duo hinge specific layouts (the spanned 1114px view gets the
 normal desktop layout, which is acceptable). Copy still has em dashes in places (Home skills
 text, About bio, case studies); not touched here.
+
+### 34.4 Follow up: mobile nav and testimonial spacing (Nov 2026)
+Reported on the live site from a phone, both fixed (uncommitted):
+- **Hamburger menu after scrolling:** `NavBar.tsx` locked scroll with `document.body.style.overflow = "hidden"`.
+  On mobile browsers that makes the body its own scroll container, so the sticky header stopped
+  following the viewport and the opened menu sat at the top of the page, out of view. The lock is
+  removed (the panel lives inside the sticky header and already has its own max height and scroll);
+  Escape now closes the menu. Checked in mobile emulated Edge at 390px: scrolled 1500px, opened the
+  menu, header stays at top 16px and the panel is on screen (before the fix the header left the screen).
+- **Testimonial gaps:** the middle card was raised 16px with a framer-motion `y: -16` on every
+  screen size, so on phones the gap above Philipp was 8px more than expected in one direction and
+  Riaz's gap was 16px larger. The raise is now `md:-mt-4` (desktop only) and motion y is 0 for all
+  three cards. Phone gaps measure 24px and 24px; desktop and tablet keep the staggered look.
+
+### 34.5 Mobile nav redesign: no hamburger (Nov 2026, supersedes the menu fix in 34.4)
+`NavBar.tsx` rewritten. One centred dark glass pill (same colours as desktop) at every size:
+`SBK` (full name from md) | Home About Work Travel | Say hi. No hamburger, no dropdown, so the
+sticky-header bug cannot come back. Under md the link row scrolls sideways (`overflow-x-auto`,
+scrollbar hidden) with soft edge fades that only show on the side with more tabs; the active tab
+is centred on every route change. Mobile labels are short ("Travel" for "Travel & Photography");
+the active tab gets a `bg-white/10` chip. "Say hi" now shows on mobile too, pinned at the right,
+because Contact is not one of the four links. Checked in mobile emulated Edge at 320, 360, 390,
+768 and 1280 while scrolled: pill centred with 16px sides, no page overflow, desktop unchanged.
+Not checked on a real phone; at 320 only "About / Work / Travel" are visible at once.
